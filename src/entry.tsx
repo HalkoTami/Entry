@@ -5,12 +5,12 @@ import { start } from './start';
 
 const items = [
   {
-    title: 'start',
-    action: ()=>start(),
+    title: '開発',
+    matchingStrings:'kaihatsu'
   },
   {
-    title: 'end',
-    action: ()=>main(),
+    title: '日誌',
+    matchingStrings:'nisshi'
   }
 ]
 const token = 'secret_5NlCmKB8tpMouUNxZdlNo0sGaTNJg5HnVxPIgWXht45'
@@ -47,7 +47,7 @@ export default function Command() {
   const [filteredList, filterList] = useState(items);
 
   useEffect(() => {
-    filterList(items.filter((item) => item.title.includes(searchText)));
+    filterList(items.filter((item) => item.matchingStrings.includes(searchText)));
   }, [searchText]);
   return (
     <List 
@@ -55,18 +55,20 @@ export default function Command() {
     onSearchTextChange={setSearchText}
     navigationTitle="Search Beers"
     searchBarPlaceholder="Search your favorite beer">
-      {filteredList.map((item) => (
+      {filteredList.map((item)=>(
         <List.Item
           key={item.title}
           icon={{ source: Icon.Link }}
           title={item.title}
           actions={
             <ActionPanel>
-              <Action title='Select' onAction={()=>item.action()} />
+              <Action title='Select' onAction={()=>start(searchText)} />
             </ActionPanel>
           }
         />
-      ))}
+      )
+      )}
+     
     </List>
   )
 }
