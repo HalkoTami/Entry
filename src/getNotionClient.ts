@@ -5,7 +5,6 @@ export async function insertRow(comment:string,dateString:string,doOnsuccess:()=
     const notion = new Client({
         auth: token,
     })
-
     try {
         const response = await notion.pages.create({
         parent: { database_id: databaseId },
@@ -33,7 +32,26 @@ export async function insertRow(comment:string,dateString:string,doOnsuccess:()=
         console.log(response)
         console.log("Success! Entry added.")
         doOnsuccess()
+        getLastInsertedRow()
     } catch (error) {
         console.log("error")
     }
 }
+export async function getLastInsertedRow(){
+    const notion = new Client({
+        auth: token,
+    })
+    const response = await notion.databases.query({
+        database_id: databaseId,
+        sorts: [
+          {
+            property: 'created time',
+            direction: 'descending',
+          },
+        ],
+        
+      });
+
+
+        console.log(response);
+    }
