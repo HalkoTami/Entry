@@ -19,12 +19,22 @@ export async function getLastRowResponse():Promise<LastRowResponse>{
     });
     const firstItem = databaseResponce.results[0]
     const itemJs = JSON.parse(JSON.stringify(firstItem).replace(" ","_")).properties
-    
+    const endDateData = itemJs.end.date
   
-    const editStartDate = convertStringToDate(itemJs.start_edit.date.start)
-    console.log(editStartDate )
+    const isOpened = endDateData==null
 
-    // const openedRowData = new OpenedRowData()
-    return new LastRowResponse(editStartDate ==null,null)
+    if(!isOpened) {return  new LastRowResponse(isOpened,null)}
+
+
+    const editStartDate = convertStringToDate(itemJs.start_edit.date.start)
+    const id = firstItem.id
+    const comment = itemJs.名前.title[0].plain_text
+    const tagData = itemJs.tag.select?.name
+
+    const openedRowData = new OpenedRowData(
+      id,editStartDate,null,comment,tagData
+    )
+    
+    return new LastRowResponse(isOpened,openedRowData)
 
 }
