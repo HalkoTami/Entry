@@ -1,6 +1,10 @@
 import { Client } from '@notionhq/client'
+import { rejects } from 'assert';
+import { resolve } from 'path';
+import { convertStringToDate } from './dateConverter';
 import { token,databaseId } from './getNotionClient';
 import { LastRowResponse } from './LastRowResponse';
+import { OpenedRowData } from './OpenedRowData';
 export async function getLastRowResponse():Promise<LastRowResponse>{
     const notion = new Client({
         auth: token,
@@ -16,17 +20,26 @@ export async function getLastRowResponse():Promise<LastRowResponse>{
         ],
     });
     const firstItem = databaseResponce.results[0]
-    const itemJs = JSON.parse(JSON.stringify(firstItem))
+    const itemJs = JSON.parse(JSON.stringify(firstItem).replace(" ","_")).properties
+    const endDateData = itemJs.end.date
+  
+    const isOpened = endDateData==null
+
+    if(!isOpened) {return  new LastRowResponse(isOpened,null)}
+
+
+    const editStartDate = convertStringToDate(itemJs.start_edit.date.start)
+    const id = firstItem.id
+    const comment = itemJs.名前.title[0].plain_text
+    const tagData = itemJs.tag.select?.name
+
+    const openedRowData = new OpenedRowData(
+      id,editStartDate,null,comment,tagData
+    )
     
-    console.log(itemJs.properties.名前.title[0])
-
-    // console.log(databaseResponce)
-    const pageResponse:Object = await notion.pages.properties.retrieve
-    ({ page_id: firstItem.id,property_id:'AYTm' });
-
-    // console.log(pageResponse)
-    const propDate = JSON.parse(JSON.stringify(pageResponse))
-    // console.log(propDate.date);
-    return new LastRowResponse(propDate.date ==null,null)
+    return new Promise((resolve,reject)=>
+      resolve(new LastRowResponse(isOpened,openedRowData))
+  
+    )
 
 }

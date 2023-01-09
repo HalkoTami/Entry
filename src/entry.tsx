@@ -1,8 +1,13 @@
-import { Action, ActionPanel, Icon, List, Form } from '@raycast/api'
-import { useEffect, useState } from "react";
-import { Client } from '@notionhq/client'
+import { Action, ActionPanel,  Form ,LaunchProps,environment} from '@raycast/api'
+import { useRef, useState } from "react";
 import { start } from './start';
 import { getLastRowResponse } from './getLastRowResponse'; 
+import { update } from './update';
+import { getTagList, Tag } from './getTagList';
+import { usePromise } from "@raycast/utils";
+import { OpenedRowData } from './OpenedRowData';
+import { LastRowResponse } from './LastRowResponse';
+import { EntryValues, UiData } from './UiData';
 
 const items = [
   {
@@ -15,96 +20,67 @@ const items = [
   }
 ]
 
-export default function Command() {
-  const [nameError, setNameError] = useState<string | undefined>();
-  const [contentText,setContentText] = useState("");
-  const [entryStatus, setEntryStatus] = useState<boolean>();
-  const [datetime, setDateTime] = useState<Date|null>();
-  const [filteredTagList, filterTagList] = useState(items);
-  const [searchTagText, setSearchTagText] = useState("");
 
-  getLastRowResponse()
 
-  async function check (){
+
+const Demo = () => {
+  const abortable = useRef<AbortController>();
+  const { isLoading, data, revalidate } = usePromise(
+    async () => {
     const result = await getLastRowResponse()
-    setEntryStatus(result.isOpened)
-    console.log(result.isOpened)
-  };
-  check()
-
+      return new UiData(await getTagList(),result);
+    },[],
+    {
+      abortable,
+    }
+  );
   
-
-  useEffect(() => {
-    filterTagList(items.filter((item) => item.matchingStrings.includes(searchTagText)));
-  }, [searchTagText]);
-
-  function getDateTime():Date{
-    if(datetime==null) return new Date()
-    else return datetime
-  }
-
-
-
-  function getContentTitle () {
-    if (entryStatus) {
-        return String("doing");
-    } 
-    return String("done");
-  };
-  function getDateTitle () {
-    if (entryStatus) {
-        return String("Start");
-    } 
-    return String("End");
-  };
-
-
-  function dropNameErrorIfNeeded() {
-    if (nameError && nameError.length > 0) {
-      setNameError(undefined);
-    }
-  }
-  function checkError(string:string|undefined){
-    if (string?.length == 0) {
-      setNameError("The field should't be empty!");
-    } else {
-      dropNameErrorIfNeeded();
-    }
-  }
-  function onContentChange(string:string){
-    checkError(string)
-    setContentText(string)
-  }
+  console.log("called")
   return (
-    <Form
-    actions={
-      <ActionPanel>
+    <Form 
+      key={"form"}
+      isLoading ={isLoading}
+      actions={
+      <ActionPanel
+      key={"actionPanel"}
+      >
         <Action.SubmitForm
-          onSubmit={()=>start(contentText,getDateTime())}
+        key={"Action.SubmitForm"}
+    
+          title={data?.switchSubmitTitle()}
+          onSubmit={(values: EntryValues) => {
+            data?.doOnSubmit(values)
+          }}
         />
       </ActionPanel>
     }>
-      
-      <Form.TextField
+    <Form.TextArea
+        key={"Form.TextArea"}
         id="contentField"
-        title={getContentTitle()}
-        error={nameError}
-        onChange={onContentChange}
-        onBlur={(event) => {
-          checkError(event.target.value)
-        }}
+        title={data?.getContentTitle()}
+        value = {data?.openedRowData?.comment}
       />
-      <Form.Dropdown id="tag" title="activity tag" defaultValue="lol"
-      onSearchTextChange={setSearchTagText}>
-        {filteredTagList.map((item)=>(
-          <Form.Dropdown.Item value={item.title} title={item.title}  />
+      <Form.Dropdown key={"Form.Dropdown"} id="tag" title="activity tag" defaultValue={data?.openedRowData?.tag}>
+        {items.map((item)=>(
+          <Form.Dropdown.Item key={"Form.Dropdown.Item"+item.title} value={item.title} title={item.title}  />
         ))}
       </Form.Dropdown>
       <Form.DatePicker 
+
+      key={"Form.DatePicker"}
       id="dateTime" 
-      title={getDateTitle()} 
+      title={data?.getDateTitle()} 
       defaultValue={new Date()}
-      onChange={setDateTime} />
+       />
     </Form>
-  )
+    );
+  
+  
+
+  
+};
+
+ export default function Command(props: LaunchProps<{ draftValues: EntryValues }>) {
+
+  return Demo()
 }
