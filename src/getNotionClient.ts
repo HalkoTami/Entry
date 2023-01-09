@@ -1,6 +1,7 @@
-import { Client } from '@notionhq/client'
-const token = 'secret_5NlCmKB8tpMouUNxZdlNo0sGaTNJg5HnVxPIgWXht45'
-const databaseId = 'a260799631664f0d8d23e80cae917495'
+import { Client} from '@notionhq/client'
+import { List } from '@raycast/api'
+export const token = 'secret_5NlCmKB8tpMouUNxZdlNo0sGaTNJg5HnVxPIgWXht45'
+export const databaseId = 'a260799631664f0d8d23e80cae917495'
 export async function insertRow(comment:string,dateString:string,doOnsuccess:()=>void){
     const notion = new Client({
         auth: token,
@@ -32,26 +33,13 @@ export async function insertRow(comment:string,dateString:string,doOnsuccess:()=
         console.log(response)
         console.log("Success! Entry added.")
         doOnsuccess()
-        getLastInsertedRow()
     } catch (error) {
         console.log("error")
     }
 }
-export async function getLastInsertedRow(){
-    const notion = new Client({
-        auth: token,
-    })
-    const response = await notion.databases.query({
-        database_id: databaseId,
-        sorts: [
-          {
-            property: 'created time',
-            direction: 'descending',
-          },
-        ],
-        
-      });
+export async function checkEntryStatus() {
+    
+}
 
 
-        console.log(response);
-    }
+
