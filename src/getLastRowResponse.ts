@@ -1,6 +1,7 @@
 import { Client } from '@notionhq/client'
 import { token,databaseId } from './getNotionClient';
 import { LastRowResponse } from './LastRowResponse';
+import { OpenedRowData } from './OpenedRowData';
 export async function getLastRowResponse():Promise<LastRowResponse>{
     const notion = new Client({
         auth: token,
@@ -16,17 +17,13 @@ export async function getLastRowResponse():Promise<LastRowResponse>{
         ],
     });
     const firstItem = databaseResponce.results[0]
-    const itemJs = JSON.parse(JSON.stringify(firstItem))
+    const itemJs = JSON.parse(JSON.stringify(firstItem).replace(" ","_")).properties
     
-    console.log(itemJs.properties.名前.title[0])
+  
+    const editStartDate = new Date(itemJs.start_edit.date.start)
+    console.log(editStartDate )
 
-    // console.log(databaseResponce)
-    const pageResponse:Object = await notion.pages.properties.retrieve
-    ({ page_id: firstItem.id,property_id:'AYTm' });
-
-    // console.log(pageResponse)
-    const propDate = JSON.parse(JSON.stringify(pageResponse))
-    // console.log(propDate.date);
-    return new LastRowResponse(propDate.date ==null,null)
+    const openedRowData = new OpenedRowData()
+    return new LastRowResponse(editStartDate ==null,null)
 
 }
