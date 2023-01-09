@@ -1,4 +1,5 @@
 import { Client } from '@notionhq/client'
+import { convertStringToDate } from './dateConverter';
 import { token,databaseId } from './getNotionClient';
 import { LastRowResponse } from './LastRowResponse';
 import { OpenedRowData } from './OpenedRowData';
@@ -20,10 +21,10 @@ export async function getLastRowResponse():Promise<LastRowResponse>{
     const itemJs = JSON.parse(JSON.stringify(firstItem).replace(" ","_")).properties
     
   
-    const editStartDate = new Date(itemJs.start_edit.date.start)
+    const editStartDate = convertStringToDate(itemJs.start_edit.date.start)
     console.log(editStartDate )
 
-    const openedRowData = new OpenedRowData()
+    // const openedRowData = new OpenedRowData()
     return new LastRowResponse(editStartDate ==null,null)
 
 }
