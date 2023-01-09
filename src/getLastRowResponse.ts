@@ -1,4 +1,6 @@
 import { Client } from '@notionhq/client'
+import { rejects } from 'assert';
+import { resolve } from 'path';
 import { convertStringToDate } from './dateConverter';
 import { token,databaseId } from './getNotionClient';
 import { LastRowResponse } from './LastRowResponse';
@@ -35,6 +37,9 @@ export async function getLastRowResponse():Promise<LastRowResponse>{
       id,editStartDate,null,comment,tagData
     )
     
-    return new LastRowResponse(isOpened,openedRowData)
+    return new Promise((resolve,reject)=>
+      resolve(new LastRowResponse(isOpened,openedRowData))
+  
+    )
 
 }
