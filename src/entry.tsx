@@ -1,19 +1,8 @@
-import { Action, ActionPanel,  Form ,LaunchProps,environment} from '@raycast/api'
-import { useRef, useState } from "react";
+import { Action, ActionPanel,  Form ,LaunchProps} from '@raycast/api'
+import { useRef} from "react";
 import { getUIDataFromNotion } from './getUIDataFromNotion'; 
 import { usePromise } from "@raycast/utils";
 import { EntryValues } from './EntryValues';
-
-const items = [
-  {
-    title: '開発',
-    matchingStrings:'kaihatsu'
-  },
-  {
-    title: '日誌',
-    matchingStrings:'nisshi'
-  }
-]
 
 
 
@@ -25,9 +14,7 @@ const Demo = () => {
     const result = await getUIDataFromNotion()
       return result;
     },[],
-    {
-      abortable,
-    }
+    {abortable}
   );
   
   console.log("called")
@@ -55,9 +42,9 @@ const Demo = () => {
         title={data?.contentTitle}
         value = {data?.openedRowData?.comment}
       />
-      <Form.Dropdown key={"Form.Dropdown"} id="tag" title="activity tag" defaultValue={data?.openedRowData?.tag}>
-        {items.map((item)=>(
-          <Form.Dropdown.Item key={"Form.Dropdown.Item"+item.title} value={item.title} title={item.title}  />
+      <Form.Dropdown key={"Form.Dropdown"} id="tag" title="activity tag">
+        {data?.tagList.map((item:string)=>(
+          <Form.Dropdown.Item key={"Form.Dropdown.Item"+item} value={item} title={item}  />
         ))}
       </Form.Dropdown>
       <Form.DatePicker 
