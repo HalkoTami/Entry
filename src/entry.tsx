@@ -17,6 +17,7 @@ const Demo = () => {
     {abortable}
   );
   
+  
   console.log("called")
   return (
     <Form 
@@ -42,7 +43,7 @@ const Demo = () => {
         title={data?.contentTitle}
         value = {data?.openedRowData?.comment}
       />
-      <Form.Dropdown key={"Form.Dropdown"} id="tag" title="activity tag">
+      <Form.Dropdown key={"Form.Dropdown"} id="tag" title="activity tag" value={data?.openedRowData?.tag}>
         {data?.tagList.map((item:string)=>(
           <Form.Dropdown.Item key={"Form.Dropdown.Item"+item} value={item} title={item}  />
         ))}
