@@ -1,13 +1,8 @@
 import { Action, ActionPanel,  Form ,LaunchProps,environment} from '@raycast/api'
 import { useRef, useState } from "react";
-import { start } from './start';
-import { getLastRowResponse } from './getLastRowResponse'; 
-import { update } from './update';
-import { getTagList, Tag } from './getTagList';
+import { getUIDataFromNotion } from './getUIDataFromNotion'; 
 import { usePromise } from "@raycast/utils";
-import { OpenedRowData } from './OpenedRowData';
-import { LastRowResponse } from './LastRowResponse';
-import { EntryValues, UiData } from './UiData';
+import { EntryValues } from './EntryValues';
 
 const items = [
   {
@@ -27,8 +22,8 @@ const Demo = () => {
   const abortable = useRef<AbortController>();
   const { isLoading, data, revalidate } = usePromise(
     async () => {
-    const result = await getLastRowResponse()
-      return new UiData(await getTagList(),result);
+    const result = await getUIDataFromNotion()
+      return result;
     },[],
     {
       abortable,
@@ -47,7 +42,7 @@ const Demo = () => {
         <Action.SubmitForm
         key={"Action.SubmitForm"}
     
-          title={data?.switchSubmitTitle()}
+          title={data?.submitTitle}
           onSubmit={(values: EntryValues) => {
             data?.doOnSubmit(values)
           }}
@@ -57,7 +52,7 @@ const Demo = () => {
     <Form.TextArea
         key={"Form.TextArea"}
         id="contentField"
-        title={data?.getContentTitle()}
+        title={data?.contentTitle}
         value = {data?.openedRowData?.comment}
       />
       <Form.Dropdown key={"Form.Dropdown"} id="tag" title="activity tag" defaultValue={data?.openedRowData?.tag}>
@@ -69,7 +64,7 @@ const Demo = () => {
 
       key={"Form.DatePicker"}
       id="dateTime" 
-      title={data?.getDateTitle()} 
+      title={data?.dateTitle} 
       defaultValue={new Date()}
        />
     </Form>

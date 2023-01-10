@@ -1,26 +1,34 @@
 
-import { Tag } from "./getTagList"
-import { LastRowResponse } from "./LastRowResponse"
+import { EntryValues } from "./EntryValues"
+import { insertRow, updatePage, UpDatingData } from "./getNotionClient"
 import { OpenedRowData } from "./OpenedRowData"
-import { start } from "./start"
-import { update } from "./update"
+import { showToast } from '@raycast/api'
 
 export class UiData{
-    tagList:[Tag]
+    tagList:string[]
     openedRowData:OpenedRowData|null
-    newEntry:boolean 
-    constructor( tagList:[Tag],
-      lastRowResponce:LastRowResponse)
+    newEntry:boolean
+    submitTitle:string
+    dateTitle:string 
+    contentTitle:string
+
+    constructor( tagList:string[],
+      openedRowData:OpenedRowData|null)
       { this.tagList = tagList
-        this.openedRowData =lastRowResponce.openedRowData
-        this.newEntry =!lastRowResponce.isOpened}
+        this.openedRowData =openedRowData
+        this.newEntry = openedRowData==null
+        this.submitTitle = this.switchSubmitTitle()
+        this.dateTitle = this.getDateTitle()
+        this.contentTitle = this.getContentTitle()
+      }
     
-    
+    private async submitWhileLoading(){
+      await showToast({ title: "Failed, isLoading", message: "Try Again" });
+    }
     public switchSubmitTitle() :string{
       switch (this.newEntry){
         case true: return "start activity" 
         case false:return "end activity"
-        case undefined: return ""
       }
     }  
     public getDateTitle ():string {
@@ -35,16 +43,12 @@ export class UiData{
         case false:return  "done"
       }
     }; 
-    public doOnSubmit(entryValues:EntryValues){
+    public async doOnSubmit(entryValues:EntryValues){
       switch (this.newEntry){
-        case true: return start(entryValues)
-        case false:return  update(entryValues)
-        case null: return
+        case true: insertRow(entryValues)
+        case false:updatePage(new UpDatingData(this.openedRowData!,entryValues))
+        case null: this.submitWhileLoading()
       }
     }
   }
-  export interface EntryValues {
-    dateTime: Date ;
-    contentField: string;
-    tag: string;
-  }
+ 
