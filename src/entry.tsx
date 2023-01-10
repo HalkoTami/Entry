@@ -1,5 +1,5 @@
 import { Action, ActionPanel,  Form ,LaunchProps} from '@raycast/api'
-import { useRef} from "react";
+import { useRef, useState} from "react";
 import { getUIDataFromNotion } from './getUIDataFromNotion'; 
 import { usePromise } from "@raycast/utils";
 import { EntryValues } from './EntryValues';
@@ -12,12 +12,19 @@ const Demo = () => {
   const { isLoading, data, revalidate } = usePromise(
     async () => {
     const result = await getUIDataFromNotion()
+    if(result.openedRowData!=null){
+      setTag(result.openedRowData.tag)
+      setComment(result.openedRowData.comment)
+    }
+      
+      console.log("called")
+
       return result;
     },[],
     {abortable}
   );
-  
-  
+  const [tag,setTag] =useState("");
+  const [comment, setComment] = useState("")
   console.log("called")
   return (
     <Form 
@@ -41,9 +48,12 @@ const Demo = () => {
         key={"Form.TextArea"}
         id="contentField"
         title={data?.contentTitle}
-        value = {data?.openedRowData?.comment}
+        value = {comment}
+        onChange = {setComment}
       />
-      <Form.Dropdown key={"Form.Dropdown"} id="tag" title="activity tag" value={data?.openedRowData?.tag}>
+      <Form.Dropdown key={"Form.Dropdown"} id="tag" title="activity tag" value={tag}
+      onChange ={setTag}
+      >
         {data?.tagList.map((item:string)=>(
           <Form.Dropdown.Item key={"Form.Dropdown.Item"+item} value={item} title={item}  />
         ))}
