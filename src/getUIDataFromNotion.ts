@@ -44,6 +44,7 @@ export async function getUIDataFromNotion():Promise<UiData>{
     const endDateData = itemJs.end.date
     const isOpened = endDateData==null
   
+
     if(!isOpened) {return  new UiData(tagListResponse,null)}
 
 
