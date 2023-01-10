@@ -43,10 +43,13 @@ export class UiData{
         case false:return  "done"
       }
     }; 
-    public async doOnSubmit(entryValues:EntryValues){
+    public doOnSubmit(entryValues:EntryValues){
       switch (this.newEntry){
-        case true: insertRow(entryValues)
-        case false:updatePage(new UpDatingData(this.openedRowData!,entryValues))
+        case true: {
+          insertRow(entryValues)
+          break
+        }
+        case false: updatePage(new UpDatingData(this.openedRowData!,entryValues))
         case null: this.submitWhileLoading()
       }
     }
