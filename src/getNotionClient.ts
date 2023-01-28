@@ -3,8 +3,8 @@ import { popToRoot, showToast } from '@raycast/api'
 import { convertDateToString } from './dateConverter'
 import { EntryValues } from './EntryValues'
 import { OpenedRowData } from './OpenedRowData'
-export const token = 'secret_5NlCmKB8tpMouUNxZdlNo0sGaTNJg5HnVxPIgWXht45'
-export const databaseId = 'a260799631664f0d8d23e80cae917495'
+export const token = 'YOUR_TOKEN'
+export const databaseId = 'YOUR_DATABASE_ID'
 export async function insertRow(entryValues:EntryValues){
     const notion = new Client({
         auth: token,
