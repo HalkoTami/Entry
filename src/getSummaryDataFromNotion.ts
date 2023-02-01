@@ -1,4 +1,4 @@
-import { convertDateToString, convertStringToDate } from "./dateConverter";
+import {  convertStringToDate } from "./dateConverter";
 import { databaseId, notion } from "./getNotionClient";
 import { ActivityData, SummaryUIData } from "./SummaryUIData";
 
