@@ -1,4 +1,4 @@
-import { Action, ActionPanel,  Form ,LaunchProps} from '@raycast/api'
+import { Action, ActionPanel,  Detail,  Form ,LaunchProps,popToRoot,useNavigation} from '@raycast/api'
 import { useRef, useState} from "react";
 import { getUIDataFromNotion } from './getUIDataFromNotion'; 
 import { usePromise } from "@raycast/utils";
@@ -6,6 +6,10 @@ import { EntryValues } from './EntryValues';
 
 
 
+export function toData(){
+  
+  
+}
 
 const Demo = () => {
   const abortable = useRef<AbortController>();
@@ -26,6 +30,8 @@ const Demo = () => {
   const [tag,setTag] =useState("");
   const [comment, setComment] = useState("")
   console.log("called")
+  const { push } = useNavigation();
+  
   return (
     <Form 
       key={"form"}
@@ -39,6 +45,7 @@ const Demo = () => {
           title={data?.submitTitle}
           onSubmit={(values: EntryValues) => {
             data?.doOnSubmit(values)
+            if(data?.newEntry==false) push(<Data/>)
           }}
         />
       </ActionPanel>
@@ -72,7 +79,19 @@ const Demo = () => {
   
 };
 
- export default function Command(props: LaunchProps<{ draftValues: EntryValues }>) {
-
+export default function Command(props: LaunchProps<{ draftValues: EntryValues }>) {
   return Demo()
+}
+export function Data() {
+
+  return (
+    <Detail
+      markdown="Pong"
+      actions={
+        <ActionPanel>
+          <Action title="Pop" onAction={popToRoot} />
+        </ActionPanel>
+      }
+    />
+  );
 }

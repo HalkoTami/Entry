@@ -1,6 +1,7 @@
 import { Client} from '@notionhq/client'
 import { popToRoot, showToast } from '@raycast/api'
 import { convertDateToString } from './dateConverter'
+import { toData } from './entry'
 import { EntryValues } from './EntryValues'
 import { database_id, my_token } from './key/secret_values'
 import { OpenedRowData } from './OpenedRowData'
@@ -102,9 +103,8 @@ export async function updatePage(data:UpDatingData){
         console.log(response)
         console.log("Success! Entry closed.")
         await showToast({ title: "Activity Ended", message: "Success! Entry updated." });
-        popToRoot()
     } catch (error) {
-        console.log("error")
+        console.log(error)
     }
     
 } 
