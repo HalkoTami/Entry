@@ -2,9 +2,10 @@ import { Client} from '@notionhq/client'
 import { popToRoot, showToast } from '@raycast/api'
 import { convertDateToString } from './dateConverter'
 import { EntryValues } from './EntryValues'
+import { database_id, my_token } from './key/secret_values'
 import { OpenedRowData } from './OpenedRowData'
-export const token = 'YOUR_TOKEN'
-export const databaseId = 'YOUR_DATABASE_ID'
+export const token = my_token
+export const databaseId = database_id
 export async function insertRow(entryValues:EntryValues){
     const notion = new Client({
         auth: token,
