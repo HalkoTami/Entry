@@ -1,5 +1,5 @@
 export class SummaryUIData {
-    date:String = Date()
+    date:string = Date()
     activityDataList:ActivityData[] 
     constructor(activityList:ActivityData[]){
         this.activityDataList = activityList

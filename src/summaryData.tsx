@@ -2,6 +2,7 @@ import { Action, ActionPanel,Detail,popToRoot} from '@raycast/api'
 import { usePromise } from '@raycast/utils';
 import { useRef } from 'react';
 import { getSummaryDataFromNotion } from './getSummaryDataFromNotion';
+import { SummaryUIData } from './SummaryUIData';
 
 export function Data() {
     const abortable = useRef<AbortController>();
@@ -13,16 +14,11 @@ export function Data() {
     },[],
     {abortable}
   );
-    const dataMd = `## Today’s Data
 
-**`+ data?.date +`**
-
-worked **1h 32min** on Raycast Extension
-
-week average: **20min**`;
+const newMd = getMarkDown(data)
     return (
       <Detail
-        markdown={dataMd}
+        markdown={newMd}
         actions={
           <ActionPanel>
             <Action title="Pop" onAction={popToRoot} />
@@ -35,4 +31,14 @@ week average: **20min**`;
         }
       />
     );
+  }
+
+  function getMarkDown(data:SummaryUIData|undefined):string{
+    let markdown:string = "## Today’s Data \n\n **"+
+    data?.date+"**\n\n"
+    data?.activityDataList.forEach((item)=>{
+        markdown+=" ## worked **"+ item.todaysTotal+"** on `"+ item.activityTag 
+        +"` \n\n > week average: **"+item.weekkyAverage+"** \n\n --- \n\n"
+    })
+    return markdown 
   }
