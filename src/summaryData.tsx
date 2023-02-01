@@ -1,9 +1,24 @@
 import { Action, ActionPanel,Detail,popToRoot} from '@raycast/api'
+import { usePromise } from '@raycast/utils';
+import { useRef } from 'react';
+import { getSummaryDataFromNotion } from './getSummaryDataFromNotion';
+export class SummaryUIData {
+    date:String = Date()
+}
 
 export function Data() {
+    const abortable = useRef<AbortController>();
+  const { isLoading, data, revalidate } = usePromise(
+    async () => {
+    const result = await getSummaryDataFromNotion()
+      console.log("called")
+      return result;
+    },[],
+    {abortable}
+  );
     const dataMd = `## Today’s Data
 
-**2032/02/01**
+**`+ data?.date +`**
 
 worked **1h 32min** on Raycast Extension
 
