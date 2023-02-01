@@ -38,9 +38,8 @@ const Entry = () => {
         key={"Action.SubmitForm"}
           title={data?.submitTitle}
           onSubmit={(values: EntryValues) => {
-            // data?.doOnSubmit(values)
-            // if(data?.newEntry==false) push(<Data/>)
-            push(<Data/>)
+            data?.doOnSubmit(values)
+            if(data?.newEntry==false) push(<Data/>)
           }}
         />
       </ActionPanel>
