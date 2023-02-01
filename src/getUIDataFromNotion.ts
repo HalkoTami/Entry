@@ -1,6 +1,4 @@
-import { Client } from '@notionhq/client'
-import { convertStringToDate } from './dateConverter';
-import { token,databaseId, notion } from './getNotionClient';
+import { databaseId, notion } from './getNotionClient';
 import { OpenedRowData } from './OpenedRowData';
 import { EntryUiData } from './UiData';
 type Tag={
