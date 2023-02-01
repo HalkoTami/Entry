@@ -21,7 +21,10 @@ const newMd = getMarkDown(data)
         markdown={newMd}
         actions={
           <ActionPanel>
-            <Action title="Pop" onAction={popToRoot} />
+            <Action title="" onAction={()=>{ 
+              if(data == undefined)revalidate()
+            else popToRoot}
+             } />
           </ActionPanel>
         }
         metadata={
