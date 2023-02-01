@@ -1,8 +1,11 @@
 export class SummaryUIData {
     date:String = Date()
-    activityDataList:ActivityData[] = []
+    activityDataList:ActivityData[] 
+    constructor(activityList:ActivityData[]){
+        this.activityDataList = activityList
+    }
 }
-class ActivityData{
+export class ActivityData{
     activityTag:string
     todaysTotal:string
     weekkyAverage:string
