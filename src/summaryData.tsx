@@ -8,7 +8,7 @@ export function Data() {
   const { isLoading, data, revalidate } = usePromise(
     async () => {
     const result = await getSummaryDataFromNotion()
-      console.log(result)
+    console.log(result)
       return result;
     },[],
     {abortable}

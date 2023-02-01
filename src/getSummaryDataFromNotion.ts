@@ -26,7 +26,6 @@ export async function getSummaryDataFromNotion() :Promise<SummaryUIData>{
     todayList.push(itemAsActivityData)
   })
   
-  console.log(todayList[5])
     return new Promise((resolve,reject)=>
       resolve(new SummaryUIData(getActivityDataListForEachTag(todayList,todayList)))
     )
@@ -36,13 +35,13 @@ class ActivityResponce{
   duration:number
   constructor(tag:string,startTime:string,endTime:string){
     this.tag = tag
-    this.duration = (convertStringToDate(endTime).getTime()-convertStringToDate(startTime).getTime())/1000
+    this.duration = (convertStringToDate(endTime).getTime()-convertStringToDate(startTime).getTime())/1000/60
   }
 }
-function getTotalMinFilteredByTag(tag:string,list:ActivityResponce[]):number{
-  let totalDuration = 0
+function getTotalMinFilteredByTag(filterTag:string,list:ActivityResponce[]):number{
+  let totalDuration:number = 0
   list.filter((item)=>{
-    item.tag == tag
+    return item.tag == filterTag
   }).forEach((item)=>{
     totalDuration += item.duration
   })

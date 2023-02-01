@@ -11,7 +11,7 @@ export class ActivityData{
     weekkyAverage:string
     constructor(tag:string,totalMin:number,weeklTotal:number){
         this.activityTag = tag
-        this.todaysTotal = this.convertMinToString(totalMin)
+        this.todaysTotal = totalMin.toString()
         this.weekkyAverage = this.convertMinToString(weeklTotal/7)
     }
     private convertMinToString(min:number):string{
