@@ -23,7 +23,7 @@ const newMd = getMarkDown(data)
           <ActionPanel>
             <Action title="" onAction={()=>{ 
               if(data == undefined)revalidate()
-            else popToRoot}
+            else popToRoot()}
              } />
           </ActionPanel>
         }
