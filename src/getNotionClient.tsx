@@ -1,7 +1,6 @@
 import { Client} from '@notionhq/client'
 import { popToRoot, showToast } from '@raycast/api'
 import { convertDateToString } from './dateConverter'
-import { toData } from './entry'
 import { EntryValues } from './EntryValues'
 import { database_id, my_token } from './key/secret_values'
 import { OpenedRowData } from './OpenedRowData'
