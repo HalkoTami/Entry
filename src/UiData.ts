@@ -4,7 +4,7 @@ import { insertRow, updatePage, UpDatingData,  } from "./getNotionClient"
 import { OpenedRowData } from "./OpenedRowData"
 import { showToast } from '@raycast/api'
 
-export class UiData{
+export class EntryUiData{
     tagList:string[]
     openedRowData:OpenedRowData|null
     newEntry:boolean
