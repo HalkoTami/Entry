@@ -50,9 +50,9 @@ function getTotalMinFilteredByTag(tag:string,list:ActivityResponce[]):number{
 }
 function getActivityDataListForEachTag(todaysList:ActivityResponce[],thisWeeksList:ActivityResponce[]):ActivityData[]{
   let list:ActivityData[] = []
-  todaysList.map((item)=>{
+  new Set(todaysList.map((item)=>{
     return item.tag
-  }).forEach((eachTag)=>{
+  })).forEach((eachTag)=>{
     list.push(new ActivityData(
       eachTag,
       getTotalMinFilteredByTag(eachTag,todaysList),
