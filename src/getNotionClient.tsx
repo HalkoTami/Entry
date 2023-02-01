@@ -6,10 +6,11 @@ import { database_id, my_token } from './key/secret_values'
 import { OpenedRowData } from './OpenedRowData'
 export const token = my_token
 export const databaseId = database_id
+export const notion = new Client({
+    auth: token,
+})
 export async function insertRow(entryValues:EntryValues){
-    const notion = new Client({
-        auth: token,
-    })
+    
     const pageData = new PageContentFromEntryValues(entryValues)
     try {
         const response = await notion.pages.create({

@@ -1,6 +1,6 @@
 import { Client } from '@notionhq/client'
 import { convertStringToDate } from './dateConverter';
-import { token,databaseId } from './getNotionClient';
+import { token,databaseId, notion } from './getNotionClient';
 import { OpenedRowData } from './OpenedRowData';
 import { EntryUiData } from './UiData';
 type Tag={
@@ -8,9 +8,6 @@ type Tag={
   name:string
   color:string
 }
-const notion = new Client({
-  auth: token,
-})
 async function getTagList():Promise<string[]>{
   const database = await notion.databases.retrieve({database_id:databaseId})
   const dataJs = JSON.parse(JSON.stringify(database).replace(" ","_"))
