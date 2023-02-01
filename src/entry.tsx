@@ -36,7 +36,6 @@ const Demo = () => {
       >
         <Action.SubmitForm
         key={"Action.SubmitForm"}
-    
           title={data?.submitTitle}
           onSubmit={(values: EntryValues) => {
             data?.doOnSubmit(values)

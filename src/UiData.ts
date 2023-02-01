@@ -23,7 +23,7 @@ export class UiData{
       }
     
     private async submitWhileLoading(){
-      await showToast({ title: "Failed, isLoading", message: "Try Again" });
+      await showToast({ title: "sending Data...", message: "can take a moment" });
     }
     public switchSubmitTitle() :string{
       switch (this.newEntry){
@@ -49,7 +49,10 @@ export class UiData{
           insertRow(entryValues)
           break
         }
-        case false: updatePage(new UpDatingData(this.openedRowData!,entryValues))
+        case false:{
+          updatePage(new UpDatingData(this.openedRowData!,entryValues))
+          break
+        } 
         case null: this.submitWhileLoading()
       }
     }
