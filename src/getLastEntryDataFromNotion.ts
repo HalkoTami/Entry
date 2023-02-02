@@ -1,16 +1,11 @@
-import { Client } from '@notionhq/client'
-import { convertStringToDate } from './dateConverter';
-import { token,databaseId } from './getNotionClient';
+import { databaseId, notion } from './sendDataToNotion';
 import { OpenedRowData } from './OpenedRowData';
-import { UiData } from './UiData';
+import { EntryUiData } from './EntryUIData';
 type Tag={
   id:string
   name:string
   color:string
 }
-const notion = new Client({
-  auth: token,
-})
 async function getTagList():Promise<string[]>{
   const database = await notion.databases.retrieve({database_id:databaseId})
   const dataJs = JSON.parse(JSON.stringify(database).replace(" ","_"))
@@ -27,7 +22,7 @@ function fetchTagList(tags:[Tag]):string[]{
   tags.forEach((tag:Tag)=>tagList.push(tag.name))
   return tagList
 }
-export async function getUIDataFromNotion():Promise<UiData>{
+export async function getUIDataFromNotion():Promise<EntryUiData>{
     const tagListResponse = await getTagList()
     
     const databaseResponce = await notion.databases.query({
@@ -45,7 +40,7 @@ export async function getUIDataFromNotion():Promise<UiData>{
     const isOpened = endDateData==null
   
 
-    if(!isOpened) {return  new UiData(tagListResponse,null)}
+    if(!isOpened) {return  new EntryUiData(tagListResponse,null)}
 
 
     const openedRowData = new OpenedRowData(
@@ -56,7 +51,7 @@ export async function getUIDataFromNotion():Promise<UiData>{
     )
     
     return new Promise((resolve,reject)=>
-      resolve(new UiData(tagListResponse,openedRowData))
+      resolve(new EntryUiData(tagListResponse,openedRowData))
     )
 
 }

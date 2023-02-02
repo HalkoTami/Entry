@@ -1,13 +1,11 @@
-import { Action, ActionPanel,  Form ,LaunchProps} from '@raycast/api'
+import { Action, ActionPanel, Form ,LaunchProps,useNavigation} from '@raycast/api'
+import { Data } from './summaryUI';
 import { useRef, useState} from "react";
-import { getUIDataFromNotion } from './getUIDataFromNotion'; 
+import { getUIDataFromNotion } from './getLastEntryDataFromNotion'; 
 import { usePromise } from "@raycast/utils";
 import { EntryValues } from './EntryValues';
 
-
-
-
-const Demo = () => {
+const Entry = () => {
   const abortable = useRef<AbortController>();
   const { isLoading, data, revalidate } = usePromise(
     async () => {
@@ -16,9 +14,7 @@ const Demo = () => {
       setTag(result.openedRowData.tag)
       setComment(result.openedRowData.comment)
     }
-      
       console.log("called")
-
       return result;
     },[],
     {abortable}
@@ -26,6 +22,8 @@ const Demo = () => {
   const [tag,setTag] =useState("");
   const [comment, setComment] = useState("")
   console.log("called")
+  const { push } = useNavigation();
+  
   return (
     <Form 
       key={"form"}
@@ -36,10 +34,10 @@ const Demo = () => {
       >
         <Action.SubmitForm
         key={"Action.SubmitForm"}
-    
           title={data?.submitTitle}
           onSubmit={(values: EntryValues) => {
-            data?.doOnSubmit(values)
+              data?.doOnSubmit(values)
+              if(data?.newEntry==false) push(<Data/>)
           }}
         />
       </ActionPanel>
@@ -67,13 +65,9 @@ const Demo = () => {
        />
     </Form>
     );
-  
-  
-
-  
 };
 
- export default function Command(props: LaunchProps<{ draftValues: EntryValues }>) {
-
-  return Demo()
+export default function Command(props: LaunchProps<{ draftValues: EntryValues }>) {
+  return Entry()
 }
+

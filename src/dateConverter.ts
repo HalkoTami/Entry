@@ -11,3 +11,10 @@ function setDateToJapanTime(date:Date):Date{
     date.setTime(date.getTime() + (9*60*60*1000));
     return date
 }
+export function getThisWeeksMonday():Date{
+    const monday = new Date().getTime() - new Date().getDate()*1000*3600*24
+    return new Date(monday)
+}
+export function getDateStringWithoutTime(date:Date):string{
+    return date.toISOString().slice(0,10)
+}
