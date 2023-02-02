@@ -37,7 +37,7 @@ export function Data() {
     data?.date+"**\n\n"
     data?.activityDataList.forEach((item)=>{
         markdown+=" ## worked **"+ item.todaysTotal+"** on `"+ item.activityTag 
-        +"` \n\n > week average: **"+item.weekkyAverage+"** \n\n "+
+        +"` \n\n > week total: **"+item.weekTotal +"**  \n\n > week average: **"+item.weekkyAverage+"** \n\n "+
         "--- \n\n"
     })
     return markdown 
