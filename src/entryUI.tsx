@@ -1,7 +1,7 @@
 import { Action, ActionPanel, Form ,LaunchProps,useNavigation} from '@raycast/api'
-import { Data } from './summaryData';
+import { Data } from './summaryUI';
 import { useRef, useState} from "react";
-import { getUIDataFromNotion } from './getUIDataFromNotion'; 
+import { getUIDataFromNotion } from './getLastEntryDataFromNotion'; 
 import { usePromise } from "@raycast/utils";
 import { EntryValues } from './EntryValues';
 

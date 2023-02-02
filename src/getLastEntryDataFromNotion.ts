@@ -1,6 +1,6 @@
-import { databaseId, notion } from './getNotionClient';
+import { databaseId, notion } from './sendDataToNotion';
 import { OpenedRowData } from './OpenedRowData';
-import { EntryUiData } from './UiData';
+import { EntryUiData } from './EntryUIData';
 type Tag={
   id:string
   name:string

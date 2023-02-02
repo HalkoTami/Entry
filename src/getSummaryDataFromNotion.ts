@@ -1,5 +1,5 @@
 import {  convertStringToDate, getDateStringWithoutTime, getThisWeeksMonday } from "./dateConverter";
-import { databaseId, notion } from "./getNotionClient";
+import { databaseId, notion } from "./sendDataToNotion";
 import { ActivityData, SummaryUIData } from "./SummaryUIData";
 
 async function getActivityResponceFromNotion(filter:Date):Promise<ActivityResponce[]> {

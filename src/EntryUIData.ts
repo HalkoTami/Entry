@@ -1,6 +1,6 @@
 
 import { EntryValues } from "./EntryValues"
-import { insertRow, updatePage,  } from "./getNotionClient"
+import { insertRow, updatePage,  } from "./sendDataToNotion"
 import { OpenedRowData } from "./OpenedRowData"
 import { showToast } from '@raycast/api'
 
