@@ -14,9 +14,7 @@ const Entry = () => {
       setTag(result.openedRowData.tag)
       setComment(result.openedRowData.comment)
     }
-      
       console.log("called")
-
       return result;
     },[],
     {abortable}
@@ -38,9 +36,8 @@ const Entry = () => {
         key={"Action.SubmitForm"}
           title={data?.submitTitle}
           onSubmit={(values: EntryValues) => {
-            // data?.doOnSubmit(values)
-            // if(data?.newEntry==false) push(<Data/>)
-            push(<Data/>)
+              data?.doOnSubmit(values)
+              if(data?.newEntry==false) push(<Data/>)
           }}
         />
       </ActionPanel>

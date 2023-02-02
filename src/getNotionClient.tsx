@@ -10,8 +10,6 @@ export const notion = new Client({
     auth: token,
 })
 export async function insertRow(entryValues:EntryValues){
-    
-    const pageData = new PageContentFromEntryValues(entryValues)
     try {
         const response = await notion.pages.create({
         parent: { database_id: databaseId },
@@ -20,20 +18,20 @@ export async function insertRow(entryValues:EntryValues){
             title:[
                 {
                 "text": {
-                    "content": pageData.comment
+                    "content": entryValues.contentField
                 }
                 }
             ]
             } ,
             "start edit": {
                 "date": {
-                  "start":  pageData.date,
+                  "start":  convertDateToString(entryValues.dateTime),
                   "time_zone": "Asia/Tokyo"
                 },
             },
             "tag": {
                 select: {
-                    name:pageData.tag
+                    name:entryValues.tag
                 }
               }
         },
@@ -46,28 +44,13 @@ export async function insertRow(entryValues:EntryValues){
         console.log("error")
     }
 }
-class PageContentFromEntryValues{
-    comment:string
-    date:string
-    tag:string
-    constructor(entryValues:EntryValues){
-            this.comment = entryValues.contentField
-            this.date = convertDateToString(entryValues.dateTime) 
-            this.tag    = entryValues.tag
-    }
-}
 export class UpDatingData{
     pageId:string
-    comment:string
-    endDate:string
-    tag:string
+    entryValues:EntryValues
     constructor(row:OpenedRowData,
         entryValues:EntryValues){
             this.pageId = row.id
-            const pageContent = new PageContentFromEntryValues(entryValues)
-            this.comment = pageContent.comment
-            this.endDate = pageContent.date
-            this.tag    = pageContent.tag
+            this.entryValues = entryValues
         }
 }
 export async function updatePage(data:UpDatingData){
@@ -82,20 +65,20 @@ export async function updatePage(data:UpDatingData){
                   title:[
                       {
                       "text": {
-                          "content": data.comment
+                          "content": data.entryValues.contentField
                       }
                       }
                   ]
               } ,
               "end":{
                   "date": {
-                      "start": data.endDate,
+                      "start": convertDateToString(data.entryValues.dateTime),
                       "time_zone": "Asia/Tokyo"
                     },
               },
               "tag": {
                   select: {
-                      name:data.tag
+                      name:data.entryValues.tag
                   }
                 }
             },
