@@ -1,5 +1,7 @@
+import { getDateStringWithoutTime } from "./dateConverter"
+
 export class SummaryUIData {
-    date:string = Date()
+    date:string = Date().toString().slice(0,21)
     activityDataList:ActivityData[] 
     constructor(activityList:ActivityData[]){
         this.activityDataList = activityList
