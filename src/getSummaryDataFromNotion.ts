@@ -1,9 +1,8 @@
-import {  convertStringToDate } from "./dateConverter";
+import {  convertStringToDate, getDateStringWithoutTime, getThisWeeksMonday } from "./dateConverter";
 import { databaseId, notion } from "./getNotionClient";
 import { ActivityData, SummaryUIData } from "./SummaryUIData";
 
-
-export async function getSummaryDataFromNotion() :Promise<SummaryUIData>{
+async function getActivityResponceFromNotion(filter:Date):Promise<ActivityResponce[]> {
   const databaseResponce = await notion.databases.query({
     database_id: databaseId,
     sorts: [
@@ -13,21 +12,33 @@ export async function getSummaryDataFromNotion() :Promise<SummaryUIData>{
       },
     ],
     filter: {
-      property:'start edit',
-      date:{
-        on_or_after:new Date().toISOString().slice(0,10)
+      and:[{
+        property:'start edit',
+        date:{
+          on_or_after:getDateStringWithoutTime(filter)
+        }},
+      { property:'end',
+        date:{
+          is_not_empty:true
+        }
       }
-    }
+    ,]}
   })
-  const todayList:ActivityResponce[] = []
+  const activityResponceList:ActivityResponce[] = []
   databaseResponce.results.forEach((item)=>{
     const js = JSON.parse(JSON.stringify(item).replace(" ","_")).properties
     const itemAsActivityData = new ActivityResponce(js.tag.select.name, js.start_edit.date.start,js.end.date.start)
-    todayList.push(itemAsActivityData)
+    activityResponceList.push(itemAsActivityData)
   })
-  
+  return new Promise((resolve)=>
+  resolve(activityResponceList))
+}
+
+export async function getSummaryDataFromNotion() :Promise<SummaryUIData>{
+  const todayList = await getActivityResponceFromNotion(new Date())
+  const weekList = await getActivityResponceFromNotion(getThisWeeksMonday())
     return new Promise((resolve,reject)=>
-      resolve(new SummaryUIData(getActivityDataListForEachTag(todayList,todayList)))
+      resolve(new SummaryUIData(getActivityDataListForEachTag(todayList,weekList)))
     )
 }
 class ActivityResponce{
