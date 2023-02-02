@@ -6,7 +6,7 @@ import { SummaryUIData } from './SummaryUIData';
 
 export function Data() {
     const abortable = useRef<AbortController>();
-  const { isLoading, data, revalidate } = usePromise(
+    const { isLoading, data, revalidate } = usePromise(
     async () => {
     const result = await getSummaryDataFromNotion()
     console.log(result)
@@ -15,10 +15,10 @@ export function Data() {
     {abortable}
   );
 
-const newMd = getMarkDown(data)
     return (
       <Detail
-        markdown={newMd}
+        isLoading ={isLoading}
+        markdown={getMarkDown(data)}
         actions={
           <ActionPanel>
             <Action title="" onAction={()=>{ 
@@ -27,16 +27,12 @@ const newMd = getMarkDown(data)
              } />
           </ActionPanel>
         }
-        metadata={
-            <Detail.Metadata>
-                
-            </Detail.Metadata>
-        }
       />
     );
   }
 
   function getMarkDown(data:SummaryUIData|undefined):string{
+    if(data==undefined) return ""
     let markdown:string = "## Today’s Data \n\n **"+
     data?.date+"**\n\n"
     data?.activityDataList.forEach((item)=>{
