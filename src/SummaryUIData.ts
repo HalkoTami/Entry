@@ -1,4 +1,3 @@
-import { getDateStringWithoutTime } from "./dateConverter"
 
 export class SummaryUIData {
     date:string = Date().toString().slice(0,21)
