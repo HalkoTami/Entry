@@ -3,7 +3,6 @@ import { popToRoot, showToast } from '@raycast/api'
 import { convertDateToString } from './dateConverter'
 import { EntryValues } from './EntryValues'
 import { database_id, my_token } from './key/secret_values'
-import { OpenedRowData } from './OpenedRowData'
 export const token = my_token
 export const databaseId = database_id
 export const notion = new Client({
@@ -44,41 +43,32 @@ export async function insertRow(entryValues:EntryValues){
         console.log("error")
     }
 }
-export class UpDatingData{
-    pageId:string
-    entryValues:EntryValues
-    constructor(row:OpenedRowData,
-        entryValues:EntryValues){
-            this.pageId = row.id
-            this.entryValues = entryValues
-        }
-}
-export async function updatePage(data:UpDatingData){
+export async function updatePage(pageId:string,entryValues:EntryValues){
     const notion = new Client({
         auth: token,
     })
     try {
         const response = await notion.pages.update({
-            page_id: data.pageId,
+            page_id: pageId,
             properties: {
               "名前": { 
                   title:[
                       {
                       "text": {
-                          "content": data.entryValues.contentField
+                          "content": entryValues.contentField
                       }
                       }
                   ]
               } ,
               "end":{
                   "date": {
-                      "start": convertDateToString(data.entryValues.dateTime),
+                      "start": convertDateToString(entryValues.dateTime),
                       "time_zone": "Asia/Tokyo"
                     },
               },
               "tag": {
                   select: {
-                      name:data.entryValues.tag
+                      name:entryValues.tag
                   }
                 }
             },

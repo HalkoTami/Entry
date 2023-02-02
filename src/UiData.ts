@@ -1,6 +1,6 @@
 
 import { EntryValues } from "./EntryValues"
-import { insertRow, updatePage, UpDatingData,  } from "./getNotionClient"
+import { insertRow, updatePage,  } from "./getNotionClient"
 import { OpenedRowData } from "./OpenedRowData"
 import { showToast } from '@raycast/api'
 
@@ -50,7 +50,7 @@ export class EntryUiData{
           break
         }
         case false:{
-          updatePage(new UpDatingData(this.openedRowData!,entryValues))
+          updatePage(this.openedRowData!.id,entryValues)
           break
         } 
         case null: this.submitWhileLoading()
