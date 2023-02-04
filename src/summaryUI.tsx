@@ -22,8 +22,7 @@ export function Data() {
         actions={
           <ActionPanel>
             <Action title="" onAction={()=>{ 
-              if(data == undefined)revalidate()
-            else popToRoot()}
+              revalidate()}
              } />
           </ActionPanel>
         }

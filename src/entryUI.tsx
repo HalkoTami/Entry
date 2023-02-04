@@ -40,6 +40,10 @@ const Entry = () => {
               if(data?.newEntry==false) push(<Data/>)
           }}
         />
+        <Action
+        title='data'
+        onAction={()=> push(<Data/>)}
+      />
       </ActionPanel>
     }>
     <Form.TextArea
