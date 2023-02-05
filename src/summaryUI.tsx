@@ -21,9 +21,12 @@ export function Data() {
         markdown={getMarkDown(data)}
         actions={
           <ActionPanel>
-            <Action title="" onAction={()=>{ 
-              revalidate()}
+            <Action title="exit" onAction={()=>{ 
+              popToRoot()}
              } />
+             <Action
+             title='reload'
+             onAction={()=>{revalidate()}}/>
           </ActionPanel>
         }
       />
