@@ -1,5 +1,5 @@
 import { databaseId, notion } from './sendDataToNotion';
-import { EntryData } from './OpenedRowData';
+import { EntryData } from './EntryData';
 import { EntryUiData } from './EntryUIData';
 type Tag={
   id:string
@@ -22,6 +22,7 @@ function fetchTagList(tags:[Tag]):string[]{
   tags.forEach((tag:Tag)=>tagList.push(tag.name))
   return tagList
 }
+
 export async function getUIDataFromNotion():Promise<EntryUiData>{
     const tagListResponse = await getTagList()
     
@@ -33,6 +34,7 @@ export async function getUIDataFromNotion():Promise<EntryUiData>{
             direction: 'descending',
           },
         ],
+        page_size: 1
     });
     const firstItem = databaseResponce.results[0]
     const itemJs = JSON.parse(JSON.stringify(firstItem).replace(" ","_")).properties
@@ -46,6 +48,7 @@ export async function getUIDataFromNotion():Promise<EntryUiData>{
     const openedRowData = new EntryData(
        firstItem.id,
        itemJs.start_edit.date.start,
+       itemJs.end.date?.start,
        itemJs.名前.title[0].plain_text,
        itemJs.tag.select?.name
     )

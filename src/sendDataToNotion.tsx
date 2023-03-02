@@ -47,6 +47,7 @@ export async function updatePage(pageId:string,entryValues:EntryValues){
     const notion = new Client({
         auth: token,
     })
+    const end = convertDateToString(entryValues.dateTime)
     try {
         const response = await notion.pages.update({
             page_id: pageId,
@@ -63,12 +64,13 @@ export async function updatePage(pageId:string,entryValues:EntryValues){
               "start edit":{
                 "date": {
                     "start": convertDateToString(entryValues.startDateTime),
+                    end: end,
                     "time_zone": "Asia/Tokyo"
                   },
                 },
               "end":{
                   "date": {
-                      "start": convertDateToString(entryValues.dateTime),
+                      "start": end,
                       "time_zone": "Asia/Tokyo"
                     },
               },
