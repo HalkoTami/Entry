@@ -1,5 +1,5 @@
 import { databaseId, notion } from './sendDataToNotion';
-import { OpenedRowData } from './OpenedRowData';
+import { EntryData } from './OpenedRowData';
 import { EntryUiData } from './EntryUIData';
 type Tag={
   id:string
@@ -43,7 +43,7 @@ export async function getUIDataFromNotion():Promise<EntryUiData>{
     if(!isOpened) {return  new EntryUiData(tagListResponse,null)}
 
 
-    const openedRowData = new OpenedRowData(
+    const openedRowData = new EntryData(
        firstItem.id,
        itemJs.start_edit.date.start,
        itemJs.名前.title[0].plain_text,

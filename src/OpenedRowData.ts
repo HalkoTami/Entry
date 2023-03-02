@@ -1,6 +1,6 @@
 import { convertStringToDate } from "./dateConverter"
 
-export class OpenedRowData{
+export class EntryData{
     id:string
     start:Date
     comment:string
