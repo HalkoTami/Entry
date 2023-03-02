@@ -12,6 +12,12 @@
       "title": "entry",
       "description": "",
       "mode": "view"
+    },
+    {
+      "name": "entryListUI",
+      "title": "Entry List",
+      "description": "",
+      "mode": "view"
     }
   ],
   "dependencies": {
