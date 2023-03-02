@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Action, ActionPanel, List } from "@raycast/api";
+import { Action, ActionPanel, Color, Icon, List } from "@raycast/api";
 import { usePromise } from "@raycast/utils";
 import { getEntryList } from "./getLastEntryDataFromNotion";
 
@@ -27,13 +27,31 @@ export default function Command() {
       navigationTitle="Search Beers"
       searchBarPlaceholder="Search your favorite beer"
     >
+        <List.Section title="Section 1">
+        <List.Item title="Item 1" />
+      </List.Section>
+      <List.Section title="Section 2" subtitle="Optional subtitle">
+        <List.Item title="Item 1" />
+      </List.Section>
       {data?.map((item) => (
         <List.Item
           key={item.id}
           title={item.comment}
+          subtitle="helllooooooooo"
+          accessories={[
+            { text: `An Accessory Text`, icon: Icon.Hammer },
+            { text: { value: `A Colored Accessory Text`, color: Color.Orange }, icon: Icon.Hammer },
+            { icon: Icon.Person, tooltip: "A person" },
+            { text: "Just Do It!" },
+            { date: new Date() },
+            { tag: new Date() },
+            { tag: { value: new Date(), color: Color.Magenta } },
+            { tag: { value: "User", color: Color.Magenta }, tooltip: "Tag with tooltip" },
+          ]}
           actions={
             <ActionPanel>
-              <Action title="Select" onAction={() => console.log(`${item} selected`)} />
+                <Action title="Edit" onAction={() => console.log(`${item} edited`)} />
+                <Action title="Delete" onAction={() => console.log(`${item} deleted`)} />
             </ActionPanel>
           }
         />

@@ -24,7 +24,7 @@ function fetchTagList(tags:[Tag]):string[]{
 }
 export async function getEntryList():Promise<EntryData[]> {
   let list:EntryData[] = []
-  list.push(new EntryData(0,"2023-03-02T07:37:00.000Z","2023-03-02T07:37:00.000Z","comment","qiita"))
+  list.push(new EntryData("0","2023-03-02T07:37:00.000Z","2023-03-02T07:37:00.000Z","comment","qiita"))
   return new Promise((resolve,reject)=>
       resolve(list)
     )
