@@ -23,13 +23,12 @@ const Entry = () => {
   const [comment, setComment] = useState("")
   console.log("called")
   const { push } = useNavigation();
-  const startDateTime = (newEntry:boolean) =>{
-    if(newEntry) return (<Form.DatePicker 
-
+  const startDateTime = (newEntry:boolean|undefined) =>{
+    if(newEntry==false) return (<Form.DatePicker 
     key={"Form.DatePicker"}
     id="start" 
     title={"start"} 
-    defaultValue={new Date()}
+    defaultValue={data?.openedRowData?.start}
     />)
     
   }
@@ -70,7 +69,7 @@ const Entry = () => {
           <Form.Dropdown.Item key={"Form.Dropdown.Item"+item} value={item} title={item}  />
         ))}
       </Form.Dropdown>
-      {startDateTime(data?.openedRowData!=null)}
+      {startDateTime(data?.newEntry)}
        <Form.DatePicker 
        key={"Form.DatePicker"}
        id="dateTime" 

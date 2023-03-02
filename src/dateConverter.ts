@@ -4,7 +4,7 @@ export function convertDateToString(date:Date):string{
 }
 export function convertStringToDate(dateString:string):Date{
     const date = new Date(dateString)
-    return setDateToJapanTime(date)
+    return date
     
 }
 function setDateToJapanTime(date:Date):Date{
