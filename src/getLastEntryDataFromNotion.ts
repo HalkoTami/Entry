@@ -22,6 +22,13 @@ function fetchTagList(tags:[Tag]):string[]{
   tags.forEach((tag:Tag)=>tagList.push(tag.name))
   return tagList
 }
+export async function getEntryList():Promise<EntryData[]> {
+  let list:EntryData[] = []
+  list.push(new EntryData(0,"2023-03-02T07:37:00.000Z","2023-03-02T07:37:00.000Z","comment","qiita"))
+  return new Promise((resolve,reject)=>
+      resolve(list)
+    )
+}
 
 export async function getUIDataFromNotion():Promise<EntryUiData>{
     const tagListResponse = await getTagList()
