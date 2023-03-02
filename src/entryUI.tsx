@@ -1,7 +1,7 @@
 import { Action, ActionPanel, Form ,LaunchProps,useNavigation} from '@raycast/api'
 import { Data } from './summaryUI';
 import { ReactNode, useRef, useState} from "react";
-import { getUIDataFromNotion } from './getLastEntryDataFromNotion'; 
+import { getUIDataFromNotion, } from './getLastEntryDataFromNotion'; 
 import { usePromise } from "@raycast/utils";
 import { EntryValues } from './EntryValues';
 
@@ -10,11 +10,11 @@ const Entry = () => {
   const { isLoading, data, revalidate } = usePromise(
     async () => {
     const result = await getUIDataFromNotion()
+  
     if(result.openedRowData!=null){
       setTag(result.openedRowData.tag)
       setComment(result.openedRowData.comment)
-    }
-      console.log("called")
+    }  
       return result;
     },[],
     {abortable}

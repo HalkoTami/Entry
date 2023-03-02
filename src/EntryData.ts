@@ -1,4 +1,4 @@
-import { convertStringToDate } from "./dateConverter"
+import { convertStringToDate, stringToDate } from "./dateConverter"
 
 export class EntryData{
     id:string
@@ -13,9 +13,9 @@ export class EntryData{
         comment:string,
         tag:string){
         this.id = id
-        this.start = convertStringToDate(start) 
+        this.start = stringToDate(start) 
         if(end==undefined) this.end =undefined 
-        else this.end =convertStringToDate(end)
+        else this.end =stringToDate(end)
         this.isOpened = end==undefined
         this.comment = comment
         this.tag = tag

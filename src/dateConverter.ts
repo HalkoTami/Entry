@@ -4,8 +4,11 @@ export function convertDateToString(date:Date):string{
 }
 export function convertStringToDate(dateString:string):Date{
     const date = new Date(dateString)
-    return date
+    return setDateToJapanTime(date)
     
+}
+export function  stringToDate(dateString:string):Date{
+     return new Date(dateString)
 }
 function setDateToJapanTime(date:Date):Date{
     date.setTime(date.getTime() + (9*60*60*1000));
