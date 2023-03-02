@@ -1,6 +1,8 @@
+import { convertStringToDate } from "./dateConverter"
+
 export class OpenedRowData{
     id:string
-    start:string
+    start:Date
     comment:string
     tag:string
     constructor(id:string,
@@ -8,7 +10,7 @@ export class OpenedRowData{
         comment:string,
         tag:string){
         this.id = id
-        this.start = start
+        this.start = convertStringToDate(start) 
         this.comment = comment
         this.tag = tag
     }

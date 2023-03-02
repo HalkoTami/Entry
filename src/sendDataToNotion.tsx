@@ -60,6 +60,12 @@ export async function updatePage(pageId:string,entryValues:EntryValues){
                       }
                   ]
               } ,
+              "start edit":{
+                "date": {
+                    "start": convertDateToString(entryValues.startDateTime),
+                    "time_zone": "Asia/Tokyo"
+                  },
+                },
               "end":{
                   "date": {
                       "start": convertDateToString(entryValues.dateTime),

@@ -1,6 +1,6 @@
 import { Action, ActionPanel, Form ,LaunchProps,useNavigation} from '@raycast/api'
 import { Data } from './summaryUI';
-import { useRef, useState} from "react";
+import { ReactNode, useRef, useState} from "react";
 import { getUIDataFromNotion } from './getLastEntryDataFromNotion'; 
 import { usePromise } from "@raycast/utils";
 import { EntryValues } from './EntryValues';
@@ -23,7 +23,16 @@ const Entry = () => {
   const [comment, setComment] = useState("")
   console.log("called")
   const { push } = useNavigation();
-  
+  const startDateTime = (newEntry:boolean|undefined) =>{
+    if(newEntry==false) return (<Form.DatePicker 
+    key={"Form.DatePicker"}
+    id="startDateTime" 
+    title={"start"} 
+    defaultValue={data?.openedRowData?.start}
+    />)
+    
+  }
+
   return (
     <Form 
       key={"form"}
@@ -60,13 +69,14 @@ const Entry = () => {
           <Form.Dropdown.Item key={"Form.Dropdown.Item"+item} value={item} title={item}  />
         ))}
       </Form.Dropdown>
-      <Form.DatePicker 
-
-      key={"Form.DatePicker"}
-      id="dateTime" 
-      title={data?.dateTitle} 
-      defaultValue={new Date()}
+      {startDateTime(data?.newEntry)}
+       <Form.DatePicker 
+       key={"Form.DatePicker"}
+       id="dateTime" 
+       title={data?.dateTitle}
+       defaultValue={new Date()}
        />
+       
     </Form>
     );
 };
