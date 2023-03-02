@@ -26,7 +26,7 @@ const Entry = () => {
   const startDateTime = (newEntry:boolean|undefined) =>{
     if(newEntry==false) return (<Form.DatePicker 
     key={"Form.DatePicker"}
-    id="start" 
+    id="startDateTime" 
     title={"start"} 
     defaultValue={data?.openedRowData?.start}
     />)
