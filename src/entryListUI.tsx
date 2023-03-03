@@ -35,11 +35,13 @@ export default function Command() {
   return (
     <List
       filtering={false}
-      onSearchTextChange={setSearchText}
-      navigationTitle="Search Beers"
-      searchBarPlaceholder="Search your favorite beer"
+      isLoading={isLoading}
+      navigationTitle="Entry List"
     >
-        { content()}
+      
+      { content()}
+      
+       
       
     </List>
   );
@@ -54,28 +56,53 @@ function getDateList(list:EntryData[]):Map<number,EntryData[]>{
   let map = new Map<number,EntryData[]>()
   const completedList = list.filter((item)=>(item.end!=undefined))
   const startDate = completedList[0].start
-  const lastDate  = completedList[completedList.length-1].end
+  const lastDate  = completedList[completedList.length-1].start
 
-  if(lastDate==undefined) return map
   const startDayCount = getDaysCountFromDate(startDate)
   const endDayCount = getDaysCountFromDate(lastDate)
   
   for(let i=startDayCount; i>endDayCount-1;i--){
-    console.log(getDateFromDaysCount(i).toDateString())
     const entries = list.filter((item)=>{
-      if(item.end!=undefined)
-      return getDaysCountFromDate(item.end)==i
+      return getDaysCountFromDate(item.start)==i
     })
     map.set(i,entries)
   } 
   return map
   
 }
+function getWeekDayMondayStart(date:Date):number{
+  const day = date.getDay()-1
+  if(day>=0) return day
+  else return 7
+}
+function getDateRelationString(date:Date):string{
+  const dayDiff = getDaysCountFromDate(new Date())-getDaysCountFromDate(date)
+  const todayDay = getWeekDayMondayStart(new Date())
+  switch(dayDiff){
+    case 0: return "Today"
+    case 1: return "Yesterday"
+    default :{
+      if(dayDiff<7+todayDay&&dayDiff<todayDay)return "This Week"
+      else if((dayDiff<7+todayDay&&dayDiff>todayDay)
+      ||(dayDiff<14+todayDay&&dayDiff<7+todayDay)) return "Last Week"
+      else if(dayDiff<14+todayDay&&dayDiff>7+todayDay
+        ||(dayDiff<21+todayDay&&dayDiff<14+todayDay)) return "2 Weeks Ago"
+      else return ""  
+    }
+  }
+}
 function getSection(dayCount:number,data:EntryData[]|undefined){
-  const dateString =getDateFromDaysCount(dayCount).toDateString() 
-  console.log(getDateFromDaysCount(dayCount).toDateString())
+  const dateString =()=>{
+    const dayDiff = getDaysCountFromDate(new Date())-dayCount
+    switch(dayDiff){
+      case 0: return "Today"
+      case 1: return "Yesterday"
+      default : return getDateFromDaysCount(dayCount).toDateString()
+    }
+  }
   return (
-    <List.Section title={dateString} subtitle="Optional subtitle">
+    <List.Section title={dateString()} subtitle=""
+    >
       {data?.map((item) => (
         getListItem(item)
       ))}
@@ -83,20 +110,25 @@ function getSection(dayCount:number,data:EntryData[]|undefined){
   )
 }
 function getListItem(item:EntryData){
+  const timeRange = ()=>{
+    const rangeEnd = ()=>{
+      if(item.end!=undefined)
+        return item.end?.toLocaleTimeString().slice(0,5)
+      else return "now "
+    }
+    return item.start.toLocaleTimeString().slice(0,5)
+    +" - " +rangeEnd()
+  }
+  const subTitle = ()=>{
+    return "⏱️ 6.5h | 🗒️ "+ item.comment
+  } 
   return (
     <List.Item
           key={item.id}
-          title={item.comment}
-          subtitle="experiment"
+          title={timeRange()}
+          subtitle={subTitle()}
           accessories={[
-            { text: `An Accessory Text`, icon: Icon.Hammer },
-            { text: { value: `A Colored Accessory Text`, color: Color.Orange }, icon: Icon.Hammer },
-            { icon: Icon.Person, tooltip: "A person" },
-            { text: "Just Do It!" },
-            { date: new Date() },
-            { tag: new Date() },
-            { tag: { value: new Date(), color: Color.Magenta } },
-            { tag: { value: "User", color: Color.Magenta }, tooltip: "Tag with tooltip" },
+            { tag: { value: item.tag, color: Color.Magenta } },
           ]}
           actions={
             <ActionPanel>

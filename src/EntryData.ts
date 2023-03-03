@@ -7,6 +7,7 @@ export class EntryData{
     comment:string
     tag:string
     isOpened:boolean
+
     constructor(id:string,
         start:string,
         end:string|undefined,
@@ -19,5 +20,7 @@ export class EntryData{
         this.isOpened = end==undefined
         this.comment = comment
         this.tag = tag
+    
+
     }
 }

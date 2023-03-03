@@ -24,16 +24,36 @@ function fetchTagList(tags:[Tag]):string[]{
 }
 export async function getEntryList():Promise<EntryData[]> {
   let list:EntryData[] = []
-  list.push(new EntryData("0","2023-03-02T07:37:00.000Z","2023-03-02T08:57:00.000Z","comment","qiita"))
-  list.push(new EntryData("2","2023-03-01T14:30:00.000Z","2023-03-01T16:45:00.000Z","comment","qiita"))
-  list.push(new EntryData("1","2023-03-01T09:11:00.000Z","2023-03-01T13:00:00.000Z","comment","qiita"))
-  list.push(new EntryData("3","2023-02-26T14:30:00.000Z","2023-02-26T16:45:00.000Z","comment","qiita"))
+  const databaseResponce = await notion.databases.query({
+    database_id: databaseId,
+    sorts: [
+      {
+        property: 'start edit',
+        direction: 'descending',
+      },
+    ],
+    page_size: 10
+  });
+
+
+  for(let i=0;i<databaseResponce.results.length;i++){
+    const entry = databaseResponce.results[i]
+    const itemJs = JSON.parse(JSON.stringify(entry).replace(" ","_")).properties
+    list.push(new EntryData(
+      entry.id,
+      itemJs.start_edit.date.start,
+      itemJs.end.date?.start,
+      itemJs.名前.title[0].plain_text,
+      itemJs.tag.select?.name
+    ))
+  }
+
   return new Promise((resolve,reject)=>
       resolve(list)
     )
 }
 
-export async function getUIDataFromNotion():Promise<EntryUiData>{
+export async function getLastEntryDataFromNotion():Promise<EntryUiData>{
     const tagListResponse = await getTagList()
     
     const databaseResponce = await notion.databases.query({
