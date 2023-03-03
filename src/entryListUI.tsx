@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Action, ActionPanel, Color, Icon, List } from "@raycast/api";
+import { Action, ActionPanel, Color, Icon, List, Navigation, useNavigation } from "@raycast/api";
 import { usePromise } from "@raycast/utils";
 import { getEntryList } from "./getLastEntryDataFromNotion";
 import { EntryData } from "./EntryData";
@@ -21,16 +21,18 @@ export default function Command() {
     filterList(items.filter((item) => item.includes(searchText)));
   }, [searchText]);
 
-  
+  const { push }:Navigation = useNavigation();
+  const edit = (id:string)=>{
+    push(<Command/>)
+  }
   const content = ()=>{
     if(data==undefined) return
     const map = getDateList(data)
     var arr = Array.from(map.keys())
     return arr.map((item)=>(
-      getSection(item,map.get(item))
+      getSection(item,map.get(item),edit)
     ))
   }
-
 
   return (
     <List
@@ -38,10 +40,7 @@ export default function Command() {
       isLoading={isLoading}
       navigationTitle="Entry List"
     >
-      
       { content()}
-      
-       
       
     </List>
   );
@@ -91,7 +90,7 @@ function getDateRelationString(date:Date):string{
     }
   }
 }
-function getSection(dayCount:number,data:EntryData[]|undefined){
+function getSection(dayCount:number,data:EntryData[]|undefined,edit:(id:string)=>void){
   const dateString =()=>{
     const dayDiff = getDaysCountFromDate(new Date())-dayCount
     switch(dayDiff){
@@ -104,12 +103,12 @@ function getSection(dayCount:number,data:EntryData[]|undefined){
     <List.Section title={dateString()} subtitle=""
     >
       {data?.map((item) => (
-        getListItem(item)
+        getListItem(item,edit)
       ))}
       </List.Section>
   )
 }
-function getListItem(item:EntryData){
+function getListItem(item:EntryData,edit:(id:string)=>void){
   const timeRange = ()=>{
     const rangeEnd = ()=>{
       if(item.end!=undefined)
@@ -121,7 +120,7 @@ function getListItem(item:EntryData){
   }
   const subTitle = ()=>{
     return "⏱️ 6.5h | 🗒️ "+ item.comment
-  } 
+  }  
   return (
     <List.Item
           key={item.id}
@@ -132,7 +131,7 @@ function getListItem(item:EntryData){
           ]}
           actions={
             <ActionPanel>
-                <Action title="Edit" onAction={() => console.log(`${item} edited`)} />
+                <Action title="Edit" onAction={() => edit(item.id)} />
                 <Action title="Delete" onAction={() => console.log(`${item} deleted`)} />
             </ActionPanel>
           }

@@ -5,7 +5,7 @@ import { getLastEntryDataFromNotion, } from './getLastEntryDataFromNotion';
 import { usePromise } from "@raycast/utils";
 import { EntryValues } from './EntryValues';
 
-const Entry = () => {
+export function Entry(pageId:string|undefined){
   const abortable = useRef<AbortController>();
   const { isLoading, data, revalidate } = usePromise(
     async () => {
@@ -82,6 +82,6 @@ const Entry = () => {
 };
 
 export default function Command(props: LaunchProps<{ draftValues: EntryValues }>) {
-  return Entry()
+  return Entry(undefined)
 }
 
