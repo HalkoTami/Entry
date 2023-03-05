@@ -24,7 +24,7 @@ export async function insertRow(entryValues:EntryValues){
             } ,
             "start edit": {
                 "date": {
-                  "start":  convertDateToString(entryValues.dateTime),
+                  "start":  convertDateToString(entryValues.startDateTime),
                   "time_zone": "Asia/Tokyo"
                 },
             },
@@ -47,7 +47,7 @@ export async function updatePage(pageId:string,entryValues:EntryValues){
     const notion = new Client({
         auth: token,
     })
-    const end = convertDateToString(entryValues.dateTime)
+    const end = convertDateToString(entryValues.endDateTime)
     try {
         const response = await notion.pages.update({
             page_id: pageId,

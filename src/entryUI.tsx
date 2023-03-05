@@ -1,44 +1,43 @@
 import { Action, ActionPanel, Form ,LaunchProps,useNavigation} from '@raycast/api'
 import { Data } from './summaryUI';
-import { ReactNode, useRef, useState} from "react";
-import { getLastEntryDataFromNotion, } from './getLastEntryDataFromNotion'; 
+import { ReactNode, useEffect, useRef, useState} from "react";
+import { getLastEntryDataFromNotion, getTagList, } from './getLastEntryDataFromNotion'; 
 import { usePromise } from "@raycast/utils";
 import { EntryValues } from './EntryValues';
 import { getDurationInString } from './dateConverter';
 
 
 
-
-class Timer {
-    constructor(public counter = 90) {
-
-        let intervalId = setInterval(() => {
-            this.counter = this.counter - 1;
-            console.log(this.counter)
-            if(this.counter === 0) clearInterval(intervalId)
-        }, 1000)
-    }
-}
 export function Entry(pageId:string|undefined){
-  
   
   const abortable = useRef<AbortController>();
   const { isLoading, data, revalidate } = usePromise(
     async () => {
-    const result = await getLastEntryDataFromNotion()
+    const result = await getLastEntryDataFromNotion(pageId)
     
     const entryData = result.openedRowData
-    if(entryData==null) return result
+   
+    const start = ()=>{
+      if(entryData==undefined) 
+      return new Date()
+      else return entryData.start
+    } 
 
+    const endDate = ()=>{
+      if(data?.openedRowData?.end==undefined)
+      return new Date()
+      else return data?.openedRowData?.end
+    }
+    setStartDateTime(start())
+    setEndDateTime(endDate())
+    if(entryData==null) {
+      return result
+    }
+    
     if(result.openedRowData!=null){
       setTag(result.openedRowData.tag)
       setComment(result.openedRowData.comment)
     }  
-
-      setInterval(() => {
-      const duration = getDurationInString(entryData.start,new Date())
-      setDuration(duration)
-      }, 1000)
   
       return result;
     },[],
@@ -47,17 +46,40 @@ export function Entry(pageId:string|undefined){
   const [tag,setTag] =useState("");
   const [comment, setComment] = useState("")
   const [duration,setDuration] = useState("")
+  const [startDateTime,setStartDateTime] = useState<Date|null>(new Date())
+  const [endDateTime,setEndDateTime] = useState<Date|null>(null)
+  useEffect(() => {
+    if(startDateTime!=null&&endDateTime!=null)
+    setDuration(getDurationInString(startDateTime,endDateTime));
+  }, [startDateTime,endDateTime]);
+  
   console.log("called")
   const { push } = useNavigation();
-  const startDateTime = (newEntry:boolean|undefined) =>{
-    if(newEntry==false) return (<Form.DatePicker 
+  const startDateTimeUI = () =>{
+    if(data==undefined) return
+    return (<Form.DatePicker 
     key={"Form.DatePickerStart"}
     id="startDateTime" 
     title={"start"} 
-    defaultValue={data?.openedRowData?.start}
+    defaultValue={startDateTime}
+    onChange={setStartDateTime}
     />)
   }
-
+  const endDateTimeUI = ()=>{
+    if(data?.openedRowData==undefined) return
+    const endDate = ()=>{
+      if(data?.openedRowData?.end==undefined)
+      return new Date()
+      else return data?.openedRowData?.end
+    }
+    return (<Form.DatePicker 
+      key={"Form.DatePickerEnd"}
+      id="endDateTime" 
+      title={"End"} 
+      defaultValue={endDateTime}
+      onChange={setEndDateTime}
+      />)
+  }
 
   return (
     <Form 
@@ -100,13 +122,9 @@ export function Entry(pageId:string|undefined){
           <Form.Dropdown.Item key={"Form.Dropdown.Item"+item} value={item} title={item}  />
         ))}
       </Form.Dropdown>
-      {startDateTime(data?.newEntry)}
-       <Form.DatePicker 
-       key={"Form.DatePicker"}
-       id="dateTime" 
-       title={data?.dateTitle}
-       defaultValue={new Date()}
-       />
+      {startDateTimeUI()}
+      {endDateTimeUI()}
+    
        
     </Form>
     );

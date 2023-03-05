@@ -1,5 +1,5 @@
 export interface EntryValues {
-    dateTime: Date ;
+    endDateTime: Date ;
     startDateTime:Date;
     contentField: string;
     tag: string;

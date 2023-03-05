@@ -3,6 +3,7 @@ import { Action, ActionPanel, Color, Icon, List, Navigation, useNavigation } fro
 import { usePromise } from "@raycast/utils";
 import { getEntryList } from "./getLastEntryDataFromNotion";
 import { EntryData } from "./EntryData";
+import { Entry } from "./entryUI";
 
 const items = ["Augustiner Helles", "Camden Hells", "Leffe Blonde", "Sierra Nevada IPA"];
 
@@ -20,10 +21,13 @@ export default function Command() {
   useEffect(() => {
     filterList(items.filter((item) => item.includes(searchText)));
   }, [searchText]);
-
+  
   const { push }:Navigation = useNavigation();
   const edit = (id:string)=>{
-    push(<Command/>)
+    function ToPage(){
+      return Entry(id)
+    }
+    push(<ToPage />)
   }
   const content = ()=>{
     if(data==undefined) return
@@ -138,3 +142,4 @@ function getListItem(item:EntryData,edit:(id:string)=>void){
         />
   )
 }
+
