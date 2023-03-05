@@ -4,6 +4,7 @@ import { usePromise } from "@raycast/utils";
 import { getEntryList } from "./getLastEntryDataFromNotion";
 import { EntryData } from "./EntryData";
 import { Entry } from "./entryUI";
+import { getTimeDiffInMilli } from "./dateConverter";
 
 const items = ["Augustiner Helles", "Camden Hells", "Leffe Blonde", "Sierra Nevada IPA"];
 
@@ -122,8 +123,16 @@ function getListItem(item:EntryData,edit:(id:string)=>void){
     return item.start.toLocaleTimeString().slice(0,5)
     +" - " +rangeEnd()
   }
+  const durationText=()=>{
+    const end = ()=>{if(item.end==null) return new Date() 
+    else return item.end }
+    const diff = getTimeDiffInMilli(item.start,end())
+    const hour = diff/1000/60/60
+    if(hour>1)return (Math.floor(hour*10)/10).toString()+"h"
+    else return (Math.floor((diff/1000/60))).toString()+"min"
+  }
   const subTitle = ()=>{
-    return "⏱️ 6.5h | 🗒️ "+ item.comment
+    return "⏱️ "+durationText()+" | 🗒️ "+ item.comment
   }  
   return (
     <List.Item

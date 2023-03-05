@@ -24,9 +24,9 @@ export function Entry(pageId:string|undefined){
     } 
 
     const endDate = ()=>{
-      if(data?.openedRowData?.end==undefined)
-      return new Date()
-      else return data?.openedRowData?.end
+      if(entryData?.end!=undefined)
+      return entryData.end
+      else return new Date()
     }
     setStartDateTime(start())
     setEndDateTime(endDate())
