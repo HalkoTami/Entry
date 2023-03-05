@@ -21,3 +21,19 @@ export function getThisWeeksMonday():Date{
 export function getDateStringWithoutTime(date:Date):string{
     return date.toISOString().slice(0,10)
 }
+export function getTimeDiffInMilli(date1:Date,date2:Date):number{
+    return date2.getTime()-date1.getTime()
+}
+export function milliDurationToString(milli:number):string{
+    const s = Math.floor(milli/1000%60)
+    const m = Math.floor(milli/1000/60%60)
+    const h = Math.floor(milli/1000/60/60%24)
+    console.log(s)
+    const checkPlace=(time:number) =>{
+        if(time<10) return "0"+time.toString()
+        else return time.toString()}
+    return checkPlace(h)+":"+checkPlace(m)+":"+checkPlace(s)
+}
+export function getDurationInString(date1:Date,date2:Date):string{
+    return milliDurationToString(getTimeDiffInMilli(date1,date2))
+}

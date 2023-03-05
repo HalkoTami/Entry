@@ -4,37 +4,64 @@ import { ReactNode, useRef, useState} from "react";
 import { getLastEntryDataFromNotion, } from './getLastEntryDataFromNotion'; 
 import { usePromise } from "@raycast/utils";
 import { EntryValues } from './EntryValues';
+import { getDurationInString } from './dateConverter';
 
+
+
+
+class Timer {
+    constructor(public counter = 90) {
+
+        let intervalId = setInterval(() => {
+            this.counter = this.counter - 1;
+            console.log(this.counter)
+            if(this.counter === 0) clearInterval(intervalId)
+        }, 1000)
+    }
+}
 export function Entry(pageId:string|undefined){
+  
+  
   const abortable = useRef<AbortController>();
   const { isLoading, data, revalidate } = usePromise(
     async () => {
     const result = await getLastEntryDataFromNotion()
-  
+    
+    const entryData = result.openedRowData
+    if(entryData==null) return result
+
     if(result.openedRowData!=null){
       setTag(result.openedRowData.tag)
       setComment(result.openedRowData.comment)
     }  
+
+      setInterval(() => {
+      const duration = getDurationInString(entryData.start,new Date())
+      setDuration(duration)
+      }, 1000)
+  
       return result;
     },[],
     {abortable}
   );
   const [tag,setTag] =useState("");
   const [comment, setComment] = useState("")
+  const [duration,setDuration] = useState("")
   console.log("called")
   const { push } = useNavigation();
   const startDateTime = (newEntry:boolean|undefined) =>{
     if(newEntry==false) return (<Form.DatePicker 
-    key={"Form.DatePicker"}
+    key={"Form.DatePickerStart"}
     id="startDateTime" 
     title={"start"} 
     defaultValue={data?.openedRowData?.start}
     />)
-    
   }
+
 
   return (
     <Form 
+      navigationTitle='2014'
       key={"form"}
       isLoading ={isLoading}
       actions={
@@ -55,6 +82,10 @@ export function Entry(pageId:string|undefined){
       />
       </ActionPanel>
     }>
+         <Form.Description
+      title="Duration"
+      text={duration}
+      />
     <Form.TextArea
         key={"Form.TextArea"}
         id="contentField"
@@ -63,7 +94,7 @@ export function Entry(pageId:string|undefined){
         onChange = {setComment}
       />
       <Form.Dropdown key={"Form.Dropdown"} id="tag" title="activity tag" value={tag}
-      onChange ={setTag}
+      onChange ={setTag} 
       >
         {data?.tagList.map((item:string)=>(
           <Form.Dropdown.Item key={"Form.Dropdown.Item"+item} value={item} title={item}  />
