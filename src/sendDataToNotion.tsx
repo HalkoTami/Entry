@@ -1,5 +1,5 @@
 import { Client} from '@notionhq/client'
-import { popToRoot, showToast } from '@raycast/api'
+import { popToRoot, showToast,useNavigation } from '@raycast/api'
 import { convertDateToString } from './dateConverter'
 import { EntryValues } from './EntryValues'
 import { database_id, my_token } from './key/secret_values'
@@ -56,8 +56,6 @@ export async function updatePage(pageId:string,entryValues:EntryValues){
         if(entryValues.endDateTime==null) return "Parent Activity Updated"
         else return "Activity ended on "+entryValues.endDateTime.toDateString()
     }
-    
-    console.log(end()+"is what typed")
     try {
         const response = await notion.pages.update({
             page_id: pageId,
@@ -87,7 +85,6 @@ export async function updatePage(pageId:string,entryValues:EntryValues){
         });
         console.log(response)
         console.log("Success! Entry closed.")
-        popToRoot()
         await showToast({ title: "Succeed!", message: completedMessage() });
     } catch (error) {
         console.log(error)

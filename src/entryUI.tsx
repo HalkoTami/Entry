@@ -5,6 +5,8 @@ import { getLastEntryDataFromNotion, getTagList, } from './getLastEntryDataFromN
 import { usePromise } from "@raycast/utils";
 import { EntryValues } from './EntryValues';
 import { getDurationInString } from './dateConverter';
+import { EntryList } from './entryListUI';
+import { updatePage } from './sendDataToNotion';
 
 
 
@@ -80,16 +82,24 @@ export function Entry(pageId:string|undefined){
       onChange={setEndDateTime}
       />)
   }
+  const update= async(values: EntryValues)=>{
+    const end = data?.openedRowData?.end
+    const isopened = data?.openedRowData?.isOpened == true
+    if(end==undefined&&isopened){
+        values.endDateTime = null
+        await data?.doOnSubmit(values)
+        push(<EntryList/>)
+    }
+  }
   const updateUI = ()=>{
-    if(data?.openedRowData?.isOpened == true)
+    if(data?.openedRowData != undefined)
     return (
       <Action.SubmitForm
         key={"Action.SubmitForm"}
           title="update"
           shortcut={{ modifiers: ["cmd"], key: "u" }}
           onSubmit={(values: EntryValues) => {
-            values.endDateTime = null
-            data?.doOnSubmit(values)
+            update(values)
           }}
         />
     )

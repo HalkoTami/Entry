@@ -8,7 +8,7 @@ import { getTimeDiffInMilli } from "./dateConverter";
 
 const items = ["Augustiner Helles", "Camden Hells", "Leffe Blonde", "Sierra Nevada IPA"];
 
-export default function Command() {
+export function EntryList() {
   const [searchText, setSearchText] = useState("");
   const [filteredList, filterList] = useState(items);
   const abortable = useRef<AbortController>();
@@ -151,4 +151,6 @@ function getListItem(item:EntryData,edit:(id:string)=>void){
         />
   )
 }
-
+export default function Command(){
+  return EntryList()
+}
