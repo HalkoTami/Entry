@@ -51,10 +51,11 @@ export async function updatePage(pageId:string,entryValues:EntryValues){
     const end =()=>{
         if(entryValues.endDateTime==null) return null
         else return convertDateToString(entryValues.endDateTime)
-    } 
+    }
+    const endDate = end() 
     const completedMessage = ()=>{
-        if(entryValues.endDateTime==null) return "Parent Activity Updated"
-        else return "Activity ended on "+entryValues.endDateTime.toDateString()
+        if(endDate==null) return "Parent Activity Updated"
+        else return "Activity ended on "+new Date(endDate).toTimeString()
     }
     try {
         const response = await notion.pages.update({
@@ -72,7 +73,7 @@ export async function updatePage(pageId:string,entryValues:EntryValues){
               "start edit":{
                 "date": {
                     "start": convertDateToString(entryValues.startDateTime),
-                    end: end(),
+                    end: endDate,
                     "time_zone": "Asia/Tokyo"
                   },
                 },
@@ -85,6 +86,7 @@ export async function updatePage(pageId:string,entryValues:EntryValues){
         });
         console.log(response)
         console.log("Success! Entry closed.")
+        if(endDate==null) popToRoot()
         await showToast({ title: "Succeed!", message: completedMessage() });
     } catch (error) {
         console.log(error)

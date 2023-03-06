@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Action, ActionPanel, Color, Icon, List, Navigation, useNavigation } from "@raycast/api";
+import { Action, ActionPanel, Color, Icon, List, Navigation, popToRoot, useNavigation } from "@raycast/api";
 import { usePromise } from "@raycast/utils";
 import { getEntryList } from "./getLastEntryDataFromNotion";
 import { EntryData } from "./EntryData";
@@ -44,6 +44,7 @@ export function EntryList() {
       filtering={false}
       isLoading={isLoading}
       navigationTitle="Entry List"
+      
     >
       { content()}
       
@@ -146,6 +147,7 @@ function getListItem(item:EntryData,edit:(id:string)=>void){
             <ActionPanel>
                 <Action title="Edit" onAction={() => edit(item.id)} />
                 <Action title="Delete" onAction={() => console.log(`${item} deleted`)} />
+                <Action title="home" shortcut={{ modifiers: [], key: "escape" }} onAction={()=>popToRoot()}/>
             </ActionPanel>
           }
         />
