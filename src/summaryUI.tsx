@@ -3,7 +3,6 @@ import { usePromise } from '@raycast/utils';
 import { useRef } from 'react';
 import { getSummaryDataFromNotion } from './getSummaryDataFromNotion';
 import { SummaryUIData } from './SummaryUIData';
-
 export function Data() {
     const abortable = useRef<AbortController>();
     const { isLoading, data, revalidate } = usePromise(
@@ -34,6 +33,7 @@ export function Data() {
   }
 
   function getMarkDown(data:SummaryUIData|undefined):string{
+    
     if(data==undefined) return ""
     let markdown:string = "## Today’s Data \n\n **"+
     data?.date+"**\n\n"

@@ -1,5 +1,5 @@
 import { Client} from '@notionhq/client'
-import { popToRoot, showToast } from '@raycast/api'
+import { popToRoot, showToast,useNavigation } from '@raycast/api'
 import { convertDateToString } from './dateConverter'
 import { EntryValues } from './EntryValues'
 import { database_id, my_token } from './key/secret_values'
@@ -24,7 +24,7 @@ export async function insertRow(entryValues:EntryValues){
             } ,
             "start edit": {
                 "date": {
-                  "start":  convertDateToString(entryValues.dateTime),
+                  "start":  convertDateToString(entryValues.startDateTime),
                   "time_zone": "Asia/Tokyo"
                 },
             },
@@ -47,6 +47,16 @@ export async function updatePage(pageId:string,entryValues:EntryValues){
     const notion = new Client({
         auth: token,
     })
+    
+    const end =()=>{
+        if(entryValues.endDateTime==null) return null
+        else return convertDateToString(entryValues.endDateTime)
+    }
+    const endDate = end() 
+    const completedMessage = ()=>{
+        if(endDate==null) return "Parent Activity Updated"
+        else return "Activity ended on "+new Date(endDate).toTimeString()
+    }
     try {
         const response = await notion.pages.update({
             page_id: pageId,
@@ -63,15 +73,10 @@ export async function updatePage(pageId:string,entryValues:EntryValues){
               "start edit":{
                 "date": {
                     "start": convertDateToString(entryValues.startDateTime),
+                    end: endDate,
                     "time_zone": "Asia/Tokyo"
                   },
                 },
-              "end":{
-                  "date": {
-                      "start": convertDateToString(entryValues.dateTime),
-                      "time_zone": "Asia/Tokyo"
-                    },
-              },
               "tag": {
                   select: {
                       name:entryValues.tag
@@ -81,7 +86,8 @@ export async function updatePage(pageId:string,entryValues:EntryValues){
         });
         console.log(response)
         console.log("Success! Entry closed.")
-        await showToast({ title: "Activity Ended", message: "Success! Entry updated." });
+        if(endDate==null) popToRoot()
+        await showToast({ title: "Succeed!", message: completedMessage() });
     } catch (error) {
         console.log(error)
     }

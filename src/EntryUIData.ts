@@ -1,19 +1,19 @@
 
 import { EntryValues } from "./EntryValues"
 import { insertRow, updatePage,  } from "./sendDataToNotion"
-import { OpenedRowData } from "./OpenedRowData"
+import { EntryData } from "./EntryData"
 import { showToast } from '@raycast/api'
 
 export class EntryUiData{
     tagList:string[]
-    openedRowData:OpenedRowData|null
+    openedRowData:EntryData|null
     newEntry:boolean
     submitTitle:string
     dateTitle:string 
     contentTitle:string
 
     constructor( tagList:string[],
-      openedRowData:OpenedRowData|null)
+      openedRowData:EntryData|null)
       { this.tagList = tagList
         this.openedRowData =openedRowData
         this.newEntry = openedRowData==null
