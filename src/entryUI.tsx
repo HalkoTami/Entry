@@ -1,4 +1,4 @@
-import { Action, ActionPanel, Form ,LaunchProps,useNavigation} from '@raycast/api'
+import { Action, ActionPanel, Form ,LaunchProps,useNavigation,} from '@raycast/api'
 import { Data } from './summaryUI';
 import { ReactNode, useEffect, useRef, useState} from "react";
 import { getLastEntryDataFromNotion, getTagList, } from './getLastEntryDataFromNotion'; 
@@ -80,6 +80,20 @@ export function Entry(pageId:string|undefined){
       onChange={setEndDateTime}
       />)
   }
+  const updateUI = ()=>{
+    if(data?.openedRowData?.isOpened == true)
+    return (
+      <Action.SubmitForm
+        key={"Action.SubmitForm"}
+          title="update"
+          shortcut={{ modifiers: ["cmd"], key: "u" }}
+          onSubmit={(values: EntryValues) => {
+            values.endDateTime = null
+            data?.doOnSubmit(values)
+          }}
+        />
+    )
+  }
 
   return (
     <Form 
@@ -87,6 +101,7 @@ export function Entry(pageId:string|undefined){
       key={"form"}
       isLoading ={isLoading}
       actions={
+        
       <ActionPanel
       key={"actionPanel"}
       >
@@ -95,13 +110,10 @@ export function Entry(pageId:string|undefined){
           title={data?.submitTitle}
           onSubmit={(values: EntryValues) => {
               data?.doOnSubmit(values)
-              if(data?.newEntry==false) push(<Data/>)
           }}
         />
-        <Action
-        title='data'
-        onAction={()=> push(<Data/>)}
-      />
+       {updateUI()}
+        
       </ActionPanel>
     }>
          <Form.Description

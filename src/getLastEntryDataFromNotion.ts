@@ -28,7 +28,7 @@ function fetchEntryData(page:PageObjectResponse|PartialPageObjectResponse):Entry
   return new EntryData(
     page.id,
     itemJs.start_edit.date.start,
-    itemJs.end.date?.start,
+    itemJs.start_edit.date.end,
     itemJs.名前.title[0].plain_text,
     itemJs.tag.select?.name
   )
