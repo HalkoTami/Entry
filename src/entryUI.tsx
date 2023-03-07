@@ -82,14 +82,12 @@ export function Entry(pageId:string|undefined){
       onChange={setEndDateTime}
       />)
   }
-  const action= async(values: EntryValues)=>{
-    const end = data?.openedRowData?.end
-    const isopened = data?.openedRowData?.isOpened == true
-    if(end==undefined&&isopened){
+  const action= async(values: EntryValues,update:boolean)=>{
+    if(update&&data?.openedRowData?.end==undefined){
         values.endDateTime = null
     }
     await data?.doOnSubmit(values)
-        push(<EntryList/>)
+    if(values.endDateTime!=null)push(<EntryList/>)
   }
   const updateUI = ()=>{
     if(data?.openedRowData != undefined)
@@ -99,7 +97,7 @@ export function Entry(pageId:string|undefined){
           title="update"
           shortcut={{ modifiers: ["cmd"], key: "u" }}
           onSubmit={(values: EntryValues) => {
-            action(values)
+            action(values,true)
           }}
         />
     )
@@ -119,7 +117,7 @@ export function Entry(pageId:string|undefined){
         key={"Action.SubmitForm"}
           title={data?.submitTitle}
           onSubmit={(values: EntryValues) => {
-              action(values)
+              action(values,false)
           }}
         />
        {updateUI()}

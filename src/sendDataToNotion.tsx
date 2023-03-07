@@ -22,7 +22,7 @@ export async function insertRow(entryValues:EntryValues){
                 }
             ]
             } ,
-            "start edit": {
+            "start_edit": {
                 "date": {
                   "start":  convertDateToString(entryValues.startDateTime),
                   "time_zone": "Asia/Tokyo"
@@ -70,7 +70,7 @@ export async function updatePage(pageId:string,entryValues:EntryValues){
                       }
                   ]
               } ,
-              "start edit":{
+              "start_edit":{
                 "date": {
                     "start": convertDateToString(entryValues.startDateTime),
                     end: endDate,

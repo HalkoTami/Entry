@@ -39,7 +39,7 @@ export async function getEntryList():Promise<EntryData[]> {
     database_id: databaseId,
     sorts: [
       {
-        property: 'start edit',
+        property: 'start_edit',
         direction: 'descending',
       },
     ],
@@ -68,7 +68,7 @@ async function getLastInsertedEntry():Promise<EntryData|null>{
     database_id: databaseId,
     sorts: [
       {
-        property: 'start edit',
+        property: 'start_edit',
         direction: 'descending',
       },
     ],
