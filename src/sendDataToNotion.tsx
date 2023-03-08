@@ -8,6 +8,8 @@ export const databaseId = database_id_activity
 export const notion = new Client({
     auth: token,
 })
+
+
 export async function insertRow(entryValues:EntryValues){
     try {
         const response = await notion.pages.create({
@@ -22,6 +24,12 @@ export async function insertRow(entryValues:EntryValues){
                 }
             ]
             } ,
+            "comment": { 
+                rich_text: [
+                    { text:{
+                        content:entryValues.contentField
+                    }
+                }]},
             "dateTime": {
                 "date": {
                   "start":  convertDateToString(entryValues.startDateTime),
@@ -32,7 +40,7 @@ export async function insertRow(entryValues:EntryValues){
                 select: {
                     name:entryValues.tag
                 }
-              }
+              },
         },
         })
         console.log(response)
@@ -70,6 +78,15 @@ export async function updatePage(pageId:string,entryValues:EntryValues){
                       }
                   ]
               } ,
+              "comment": { 
+                rich_text: [
+                    { text:{
+                        content:entryValues.contentField
+                    }
+
+                    }
+                ]
+                },
               "dateTime":{
                 "date": {
                     "start": convertDateToString(entryValues.startDateTime),

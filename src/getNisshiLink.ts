@@ -33,7 +33,7 @@ async function createTodayNisshi():Promise<string> {
             title:[
                 {
                 "text": {
-                    "content": "ほげ"
+                    "content": "日誌"
                 }
                 }
             ]
