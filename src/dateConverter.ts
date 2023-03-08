@@ -19,7 +19,7 @@ export function getThisWeeksMonday():Date{
     return new Date(monday)
 }
 export function getDateStringWithoutTime(date:Date):string{
-    return date.toISOString().slice(0,10)
+    return setDateToJapanTime(date).toISOString().slice(0,10)
 }
 export function getTimeDiffInMilli(date1:Date,date2:Date):number{
     return date2.getTime()-date1.getTime()

@@ -2,9 +2,9 @@ import { Client} from '@notionhq/client'
 import { popToRoot, showToast,useNavigation } from '@raycast/api'
 import { convertDateToString } from './dateConverter'
 import { EntryValues } from './EntryValues'
-import { database_id, my_token } from './key/secret_values'
+import { database_id_activity, my_token } from './key/secret_values'
 export const token = my_token
-export const databaseId = database_id
+export const databaseId = database_id_activity
 export const notion = new Client({
     auth: token,
 })
