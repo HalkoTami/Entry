@@ -27,9 +27,9 @@ function fetchEntryData(page:PageObjectResponse|PartialPageObjectResponse):Entry
   const itemJs = JSON.parse(JSON.stringify(page).replace(" ","_")).properties
   return new EntryData(
     page.id,
-    itemJs.start_edit.date.start,
-    itemJs.start_edit.date.end,
-    itemJs.名前.title[0].plain_text,
+    itemJs.dateTime.date.start,
+    itemJs.dateTime.date.end,
+    itemJs.title.title[0].plain_text,
     itemJs.tag.select?.name
   )
 }
@@ -39,7 +39,7 @@ export async function getEntryList():Promise<EntryData[]> {
     database_id: databaseId,
     sorts: [
       {
-        property: 'start_edit',
+        property: 'dateTime',
         direction: 'descending',
       },
     ],
@@ -68,7 +68,7 @@ async function getLastInsertedEntry():Promise<EntryData|null>{
     database_id: databaseId,
     sorts: [
       {
-        property: 'start_edit',
+        property: 'dateTime',
         direction: 'descending',
       },
     ],

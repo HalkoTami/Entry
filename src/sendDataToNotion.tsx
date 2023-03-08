@@ -13,7 +13,7 @@ export async function insertRow(entryValues:EntryValues){
         const response = await notion.pages.create({
         parent: { database_id: databaseId },
         properties: {
-            "名前": { 
+            "title": { 
             title:[
                 {
                 "text": {
@@ -22,7 +22,7 @@ export async function insertRow(entryValues:EntryValues){
                 }
             ]
             } ,
-            "start_edit": {
+            "dateTime": {
                 "date": {
                   "start":  convertDateToString(entryValues.startDateTime),
                   "time_zone": "Asia/Tokyo"
@@ -61,7 +61,7 @@ export async function updatePage(pageId:string,entryValues:EntryValues){
         const response = await notion.pages.update({
             page_id: pageId,
             properties: {
-              "名前": { 
+              "title": { 
                   title:[
                       {
                       "text": {
@@ -70,7 +70,7 @@ export async function updatePage(pageId:string,entryValues:EntryValues){
                       }
                   ]
               } ,
-              "start_edit":{
+              "dateTime":{
                 "date": {
                     "start": convertDateToString(entryValues.startDateTime),
                     end: endDate,
