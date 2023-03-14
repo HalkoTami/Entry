@@ -6,7 +6,7 @@ export default async function Command() {
   const Js = JSON.parse(JSON.stringify(notion))
   const link = await getNisshiLink()
   
-  await open(link);
+  await open(link,notion);
 
 }
  
