@@ -4,6 +4,7 @@ export class EntryData{
     id:string
     start:Date
     end:Date|null
+    title:string
     comment:string
     tag:string
     isOpened:boolean
@@ -12,7 +13,8 @@ export class EntryData{
         start:string,
         end:string|null,
         comment:string,
-        tag:string){
+        tag:string,
+        title:string){
         this.id = id
         this.start = stringToDate(start) 
         if(end==undefined) this.end =null 
@@ -20,7 +22,7 @@ export class EntryData{
         this.isOpened = end==undefined
         this.comment = comment
         this.tag = tag
-    
+        this.title = title
 
     }
 }

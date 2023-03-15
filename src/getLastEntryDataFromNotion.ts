@@ -29,9 +29,11 @@ function fetchEntryData(page:PageObjectResponse|PartialPageObjectResponse):Entry
     page.id,
     itemJs.dateTime.date.start,
     itemJs.dateTime.date.end,
-    itemJs.title.title[0].plain_text,
-    itemJs.tag.select?.name
+    itemJs.comment.rich_text[0].plain_text,
+    itemJs.tag.select?.name,
+    itemJs.title.title[0].plain_text
   )
+  
 }
 export async function getEntryList():Promise<EntryData[]> {
   let list:EntryData[] = []

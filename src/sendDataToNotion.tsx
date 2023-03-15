@@ -73,7 +73,7 @@ export async function updatePage(pageId:string,entryValues:EntryValues){
                   title:[
                       {
                       "text": {
-                          "content": entryValues.contentField
+                          "content": entryValues.title
                       }
                       }
                   ]

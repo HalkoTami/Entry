@@ -7,9 +7,27 @@ import { EntryValues } from './EntryValues';
 import { getDurationInString } from './dateConverter';
 import { EntryList } from './entryListUI';
 import { updatePage } from './sendDataToNotion';
+import { EntryData } from './EntryData';
+import { EntryUiData } from './EntryUIData';
 
 
-
+function TitleUI(data:EntryUiData|undefined){
+  if(data!=undefined){
+    const title = ()=>{
+      if(data.openedRowData==undefined||data.openedRowData==null) return ""
+      else return data.openedRowData.title
+    }
+    return (
+      <Form.TextField
+          key={"Form.TextArea"}
+          id="title"
+          title={"title"}
+          defaultValue={title()}
+        />
+    )
+  
+  }
+}
 export function Entry(pageId:string|undefined){
   
   const abortable = useRef<AbortController>();
@@ -128,6 +146,7 @@ export function Entry(pageId:string|undefined){
       title="Duration"
       text={duration}
       />
+      {TitleUI(data)}
     <Form.TextArea
         key={"Form.TextArea"}
         id="contentField"
